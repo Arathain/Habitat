@@ -1,43 +1,43 @@
 package mod.schnappdragon.habitat.client.particle;
 
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.DripParticle;
+import net.minecraft.client.particle.BlockLeakParticle;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.core.particles.ParticleOptions;
-import net.minecraft.core.particles.SimpleParticleType;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
+import net.minecraft.client.particle.ParticleFactory;
+import net.minecraft.client.particle.SpriteProvider;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.fluid.Fluid;
+import net.minecraft.fluid.Fluids;
+import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.particle.ParticleEffect;
+import net.minecraft.sound.SoundCategory;
 
-public class FallingSlimeParticle extends DripParticle.FallAndLandParticle {
-    private FallingSlimeParticle(ClientLevel world, double x, double y, double z, Fluid fluid, ParticleOptions particleData) {
+public class FallingSlimeParticle extends BlockLeakParticle.Falling {
+    private FallingSlimeParticle(ClientWorld world, double x, double y, double z, Fluid fluid, ParticleEffect particleData) {
         super(world, x, y, z, fluid, particleData);
     }
 
     protected void postMoveUpdate() {
         if (this.onGround) {
-            this.remove();
-            this.level.addParticle(this.landParticle, this.x, this.y, this.z, 0.0D, 0.0D, 0.0D);
-            this.level.playLocalSound(this.x + 0.5D, this.y, this.z + 0.5D, HabitatSoundEvents.SLIME_FERN_DROP.get(), SoundSource.BLOCKS, 0.3F + this.level.random.nextFloat() * 2.0F / 3.0F, 1.0F, false);
+            this.markDead();
+            this.world.addParticle(this.nextParticle, this.x, this.y, this.z, 0.0D, 0.0D, 0.0D);
+            this.world.playSound(this.x + 0.5D, this.y, this.z + 0.5D, HabitatSoundEvents.SLIME_FERN_DROP, SoundCategory.BLOCKS, 0.3F + this.world.random.nextFloat() * 2.0F / 3.0F, 1.0F, false);
         }
     }
 
-    public static class FallingSlimeProvider implements ParticleProvider<SimpleParticleType> {
-        protected final SpriteSet spriteSet;
+    public static class FallingSlimeFactory implements ParticleFactory<DefaultParticleType> {
+        protected final SpriteProvider SpriteProvider;
 
-        public FallingSlimeProvider(SpriteSet spriteSet) {
-            this.spriteSet = spriteSet;
+        public FallingSlimeFactory(SpriteProvider SpriteProvider) {
+            this.SpriteProvider = SpriteProvider;
         }
 
-        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            FallingSlimeParticle slimeparticle = new FallingSlimeParticle(worldIn, x, y, z, Fluids.EMPTY, HabitatParticleTypes.LANDING_SLIME.get());
-            slimeparticle.gravity = 0.01F;
+        public Particle createParticle(DefaultParticleType typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+            FallingSlimeParticle slimeparticle = new FallingSlimeParticle(worldIn, x, y, z, Fluids.EMPTY, HabitatParticleTypes.LANDING_SLIME);
+            slimeparticle.gravityStrength = 0.01F;
             slimeparticle.setColor(0.463F, 0.745F, 0.427F);
-            slimeparticle.pickSprite(this.spriteSet);
+            slimeparticle.setSprite(this.SpriteProvider);
             return slimeparticle;
         }
     }

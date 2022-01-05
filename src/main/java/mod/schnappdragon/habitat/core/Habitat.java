@@ -1,6 +1,8 @@
 package mod.schnappdragon.habitat.core;
 
 import mod.schnappdragon.habitat.client.renderer.HabitatRenderLayers;
+import mod.schnappdragon.habitat.common.registry.HabitatCriterionTriggers;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import mod.schnappdragon.habitat.core.api.conditions.RecipeConditions;
 import mod.schnappdragon.habitat.core.dispenser.HabitatDispenseItemBehavior;
 import mod.schnappdragon.habitat.core.misc.*;
@@ -17,10 +19,8 @@ import net.minecraftforge.fml.loading.FMLLoader;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-@Mod(Habitat.MODID)
 public class Habitat {
     public static final Logger LOGGER = LogManager.getLogger();
-    public static final String MODID = "habitat";
     public static final boolean DEV = !FMLLoader.isProduction();
 
     public Habitat() {

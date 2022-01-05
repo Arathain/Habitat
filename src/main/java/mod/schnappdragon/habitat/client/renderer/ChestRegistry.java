@@ -1,14 +1,14 @@
 package mod.schnappdragon.habitat.client.renderer;
 
 import mod.schnappdragon.habitat.common.block.ChestVariant;
-import mod.schnappdragon.habitat.core.Habitat;
+import mod.schnappdragon.habitat.Habitat;
 import net.minecraft.client.renderer.Sheets;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Habitat.MODID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(modid = Habitat.MOD_ID, value = Dist.CLIENT, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ChestRegistry {
     @SubscribeEvent
     public static void onStitch(TextureStitchEvent.Pre event) {

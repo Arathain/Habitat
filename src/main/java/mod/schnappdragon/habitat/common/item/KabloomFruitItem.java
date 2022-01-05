@@ -2,7 +2,7 @@ package mod.schnappdragon.habitat.common.item;
 
 import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruit;
 import mod.schnappdragon.habitat.core.registry.HabitatItems;
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;

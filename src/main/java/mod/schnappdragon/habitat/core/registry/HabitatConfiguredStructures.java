@@ -1,10 +1,10 @@
 package mod.schnappdragon.habitat.core.registry;
 
-import mod.schnappdragon.habitat.core.Habitat;
+import mod.schnappdragon.habitat.Habitat;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.PlainVillagePools;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.levelgen.feature.ConfiguredStructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
 
@@ -16,6 +16,6 @@ public class HabitatConfiguredStructures {
     }
 
     private static void register(String id, ConfiguredStructureFeature<?, ?> structure) {
-        Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, new ResourceLocation(Habitat.MODID, id), structure);
+        Registry.register(BuiltinRegistries.CONFIGURED_STRUCTURE_FEATURE, new Identifier(Habitat.MOD_ID, id), structure);
     }
 }

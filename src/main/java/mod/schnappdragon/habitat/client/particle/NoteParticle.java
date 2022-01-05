@@ -1,52 +1,50 @@
 package mod.schnappdragon.habitat.client.particle;
 
-import mod.schnappdragon.habitat.core.particles.ColorableParticleOption;
-import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.particle.ParticleProvider;
-import net.minecraft.client.particle.ParticleRenderType;
-import net.minecraft.client.particle.SpriteSet;
-import net.minecraft.client.particle.TextureSheetParticle;
-import net.minecraft.util.Mth;
+import net.fabricmc.api.EnvType;
+import net.fabricmc.api.Environment;
+import net.minecraft.client.particle.*;
+import net.minecraft.client.world.ClientWorld;
+import net.minecraft.util.math.MathHelper;
 
-public class NoteParticle<T extends ColorableParticleOption> extends TextureSheetParticle {
-    private NoteParticle(ClientLevel world, double x, double y, double z, T particle, SpriteSet spriteSet) {
+public class NoteParticle<T extends ColorableParticleEffect> extends SpriteBillboardParticle {
+    private NoteParticle(ClientWorld world, double x, double y, double z, T particle, SpriteProvider SpriteProvider) {
         super(world, x, y, z, 0.0D, 0.0D, 0.0D);
-        this.speedUpWhenYMotionIsBlocked = true;
-        this.pickSprite(spriteSet);
-        this.friction = 0.66F;
+        //this.speedUpWhenYMotionIsBlocked = true;
+        this.collidesWithWorld = true;
+        this.setSprite(SpriteProvider);
+        this.velocityMultiplier = 0.66F;
 
-        this.xd *= 0.01F;
-        this.yd *= 0.01F;
-        this.zd *= 0.01F;
-        this.yd += 0.2D;
+        this.velocityX *= 0.01F;
+        this.velocityY *= 0.01F;
+        this.velocityZ *= 0.01F;
+        this.velocityY += 0.2D;
 
         float f1 = 0.98F + this.random.nextFloat() * 0.02F;
-        this.rCol = particle.getColor().x() * f1;
-        this.gCol = particle.getColor().y() * f1;
-        this.bCol = particle.getColor().z() * f1;
+        this.colorRed = particle.getColor().getX() * f1;
+        this.colorGreen = particle.getColor().getY() * f1;
+        this.colorBlue = particle.getColor().getZ() * f1;
 
-        this.quadSize *= 0.8F;
-        this.lifetime = 5;
+        this.scale *= 0.8F;
+        this.maxAge = 5;
     }
 
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_OPAQUE;
+    public ParticleTextureSheet getType() {
+        return ParticleTextureSheet.PARTICLE_SHEET_OPAQUE;
     }
 
-    public float getQuadSize(float scale) {
-        return this.quadSize * Mth.clamp(((float) this.age + scale) / (float) this.lifetime * 32.0F, 0.0F, 1.0F);
+    public float getSize(float scale) {
+        return this.scale * MathHelper.clamp(((float) this.age + scale) / (float) this.maxAge * 32.0F, 0.0F, 1.0F);
     }
+    @Environment(EnvType.CLIENT)
+    public static class Factory implements ParticleFactory<ColorableParticleEffect> {
+        private final SpriteProvider spriteProvider;
 
-    public static class Provider implements ParticleProvider<ColorableParticleOption> {
-        private final SpriteSet sprite;
-
-        public Provider(SpriteSet pSprites) {
-            this.sprite = pSprites;
+        public Factory(SpriteProvider spriteProvider) {
+            this.spriteProvider = spriteProvider;
         }
 
-        public Particle createParticle(ColorableParticleOption particle, ClientLevel world, double x, double y, double z, double motionX, double motionY, double motionZ) {
-            return new NoteParticle<>(world, x, y, z, particle, sprite);
+        public Particle createParticle(ColorableParticleEffect particleEffect, ClientWorld clientWorld, double x, double y, double z, double velocityX, double velocityY, double velocityZ) {
+            return new NoteParticle(clientWorld, x, y, z, particleEffect, spriteProvider);
         }
     }
 }

@@ -1,7 +1,6 @@
 package mod.schnappdragon.habitat.core.misc;
 
 import com.google.common.collect.Sets;
-import mod.schnappdragon.habitat.core.tags.HabitatBlockTags;
 import net.minecraft.world.entity.ai.village.poi.PoiType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.fml.util.ObfuscationReflectionHelper;

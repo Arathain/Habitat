@@ -1,7 +1,7 @@
 package mod.schnappdragon.habitat.common.block;
 
 import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruit;
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;

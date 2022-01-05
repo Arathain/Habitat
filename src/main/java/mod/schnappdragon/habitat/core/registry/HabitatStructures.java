@@ -3,8 +3,8 @@ package mod.schnappdragon.habitat.core.registry;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import mod.schnappdragon.habitat.common.levelgen.feature.structure.FairyRingStructure;
-import mod.schnappdragon.habitat.core.Habitat;
-import mod.schnappdragon.habitat.core.HabitatConfig;
+import mod.schnappdragon.habitat.Habitat;
+import mod.schnappdragon.habitat.HabitatConfig;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.world.level.levelgen.StructureSettings;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
@@ -18,7 +18,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class HabitatStructures {
-    public static final DeferredRegister<StructureFeature<?>> STRUCTURE_FEATURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, Habitat.MODID);
+    public static final DeferredRegister<StructureFeature<?>> STRUCTURE_FEATURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, Habitat.MOD_ID);
 
     public static final RegistryObject<StructureFeature<JigsawConfiguration>> FAIRY_RING = STRUCTURE_FEATURES.register("fairy_ring", () -> (new FairyRingStructure(JigsawConfiguration.CODEC)));
 

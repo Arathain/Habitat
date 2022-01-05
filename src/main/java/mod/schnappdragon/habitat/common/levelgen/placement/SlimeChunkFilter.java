@@ -2,13 +2,15 @@ package mod.schnappdragon.habitat.common.levelgen.placement;
 
 import com.mojang.serialization.Codec;
 import mod.schnappdragon.habitat.core.registry.HabitatPlacementModifierTypes;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.levelgen.WorldgenRandom;
-import net.minecraft.world.level.levelgen.placement.*;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.gen.decorator.AbstractConditionalPlacementModifier;
+import net.minecraft.world.gen.decorator.DecoratorContext;
+import net.minecraft.world.gen.decorator.PlacementModifierType;
+import net.minecraft.world.gen.random.ChunkRandom;
 
 import java.util.Random;
 
-public class SlimeChunkFilter extends PlacementFilter {
+public class SlimeChunkFilter extends AbstractConditionalPlacementModifier {
     private static final SlimeChunkFilter FILTER = new SlimeChunkFilter();
     public static Codec<SlimeChunkFilter> CODEC = Codec.unit(() -> FILTER);
 
@@ -16,11 +18,12 @@ public class SlimeChunkFilter extends PlacementFilter {
         return FILTER;
     }
 
-    protected boolean shouldPlace(PlacementContext context, Random random, BlockPos pos) {
-        return WorldgenRandom.seedSlimeChunk(pos.getX() >> 4, pos.getZ() >> 4, context.getLevel().getSeed(), 987234911L).nextInt(10) == 0;
+    protected boolean shouldPlace(DecoratorContext context, Random random, BlockPos pos) {
+        return ChunkRandom.getSlimeRandom(pos.getX() >> 4, pos.getZ() >> 4, context.getWorld().getSeed(), 987234911L).nextInt(10) == 0;
     }
 
-    public PlacementModifierType<?> type() {
+    @Override
+    public PlacementModifierType<?> getType() {
         return HabitatPlacementModifierTypes.SLIME_CHUNK_FILTER;
     }
 }

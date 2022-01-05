@@ -2,93 +2,96 @@ package mod.schnappdragon.habitat.common.advancement;
 
 import com.google.common.collect.Maps;
 import com.google.gson.JsonObject;
-import net.minecraft.advancements.CriterionTrigger;
-import net.minecraft.advancements.CriterionTriggerInstance;
-import net.minecraft.advancements.critereon.DeserializationContext;
-import net.minecraft.advancements.critereon.SerializationContext;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.server.PlayerAdvancements;
-import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.advancement.PlayerAdvancementTracker;
+import net.minecraft.advancement.criterion.Criterion;
+import net.minecraft.advancement.criterion.CriterionConditions;
+import net.minecraft.predicate.entity.AdvancementEntityPredicateDeserializer;
+import net.minecraft.predicate.entity.AdvancementEntityPredicateSerializer;
+import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.Identifier;
 
 import java.util.*;
 
-public final class HabitatCriterionTrigger implements CriterionTrigger<HabitatCriterionTrigger.Instance> {
-    private final Map<PlayerAdvancements, Listeners> listeners = Maps.newHashMap();
-    private final ResourceLocation id;
+public final class HabitatCriterionTrigger implements Criterion<HabitatCriterionTrigger.Instance> {
+    private final Map<PlayerAdvancementTracker, Listeners> listeners = Maps.newHashMap();
+    private final Identifier id;
 
-    public HabitatCriterionTrigger(ResourceLocation id) {
+    public HabitatCriterionTrigger(Identifier id) {
         this.id = id;
     }
 
     @Override
-    public ResourceLocation getId() {
+    public Identifier getId() {
         return this.id;
     }
 
     @Override
-    public void addPlayerListener(PlayerAdvancements playerAdvancements, Listener<Instance> listener) {
-        Listeners listeners = this.listeners.computeIfAbsent(playerAdvancements, Listeners::new);
-        listeners.add(listener);
+    public void beginTrackingCondition(PlayerAdvancementTracker manager, ConditionsContainer<Instance> conditions) {
+        Listeners listeners = this.listeners.computeIfAbsent(manager, Listeners::new);
+        listeners.add(conditions);
     }
 
     @Override
-    public void removePlayerListener(PlayerAdvancements playerAdvancements, Listener<Instance> listener) {
-        Listeners listeners = this.listeners.get(playerAdvancements);
+    public void endTrackingCondition(PlayerAdvancementTracker manager, ConditionsContainer<Instance> conditions) {
+        Listeners listeners = this.listeners.get(manager);
         if (listeners != null) {
-            listeners.remove(listener);
+            listeners.remove(conditions);
             if (listeners.isEmpty())
-                this.listeners.remove(playerAdvancements);
+                this.listeners.remove(conditions);
         }
     }
 
     @Override
-    public void removePlayerListeners(PlayerAdvancements playerAdvancements) {
-        this.listeners.remove(playerAdvancements);
+    public void endTracking(PlayerAdvancementTracker tracker) {
+        this.listeners.remove(tracker);
     }
 
     @Override
-    public Instance createInstance(JsonObject object, DeserializationContext conditions) {
+    public Instance conditionsFromJson(JsonObject obj, AdvancementEntityPredicateDeserializer predicateDeserializer) {
         return new Instance(this.id);
     }
 
-    public void trigger(ServerPlayer player) {
-        Listeners listeners = this.listeners.get(player.getAdvancements());
+
+
+    public void trigger(ServerPlayerEntity player) {
+        Listeners listeners = this.listeners.get(player.getAdvancementTracker());
         if (listeners != null)
             listeners.trigger();
     }
 
-    public static class Instance implements CriterionTriggerInstance {
-        private final ResourceLocation id;
+    public static class Instance implements CriterionConditions {
+        private final Identifier id;
 
-        Instance(ResourceLocation id) {
+        Instance(Identifier id) {
             super();
             this.id = id;
         }
 
         @Override
-        public ResourceLocation getCriterion() {
+        public Identifier getId() {
             return this.id;
         }
 
         @Override
-        public JsonObject serializeToJson(SerializationContext conditions) {
+        public JsonObject toJson(AdvancementEntityPredicateSerializer predicateSerializer) {
             return new JsonObject();
         }
+
     }
 
     static class Listeners {
-        private final Set<Listener<Instance>> listeners = new HashSet<>();
-        private final PlayerAdvancements advancements;
+        private final Set<ConditionsContainer<Instance>> listeners = new HashSet<>();
+        private final PlayerAdvancementTracker advancements;
 
-        public Listeners(PlayerAdvancements advancements) {
+        public Listeners(PlayerAdvancementTracker advancements) {
             this.advancements = advancements;
         }
 
-        public void add(Listener<Instance> listener) {
+        public void add(ConditionsContainer<Instance> listener) {
             this.listeners.add(listener);
         }
 
-        public void remove(Listener<Instance> listener) {
+        public void remove(ConditionsContainer<Instance> listener) {
             this.listeners.remove(listener);
         }
 
@@ -97,9 +100,9 @@ public final class HabitatCriterionTrigger implements CriterionTrigger<HabitatCr
         }
 
         public void trigger() {
-            List<Listener<Instance>> listenerList = new ArrayList<>(this.listeners);
-            for (Listener<Instance> instanceListener : listenerList)
-                instanceListener.run(this.advancements);
+            List<ConditionsContainer<Instance>> listenerList = new ArrayList<>(this.listeners);
+            for (ConditionsContainer<Instance> instanceListener : listenerList)
+                instanceListener.grant(this.advancements);
         }
     }
 }

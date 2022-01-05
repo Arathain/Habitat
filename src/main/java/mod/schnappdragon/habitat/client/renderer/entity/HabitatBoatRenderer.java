@@ -5,23 +5,23 @@ import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Quaternion;
 import com.mojang.math.Vector3f;
 import mod.schnappdragon.habitat.common.entity.vehicle.HabitatBoat;
-import mod.schnappdragon.habitat.core.Habitat;
+import mod.schnappdragon.habitat.Habitat;
 import net.minecraft.client.model.BoatModel;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRenderer;
-import net.minecraft.client.renderer.entity.EntityRendererProvider;
+import net.minecraft.client.renderer.entity.EntityRendererFactory;
 import net.minecraft.client.renderer.texture.OverlayTexture;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.Mth;
+import net.minecraft.resources.Identifier;
+import net.minecraft.util.MathHelper;
 
 public class HabitatBoatRenderer extends EntityRenderer<HabitatBoat> {
-    private static final ResourceLocation[] BOAT_TEXTURES = new ResourceLocation[]{
-            new ResourceLocation(Habitat.MODID, "textures/entity/boat/fairy_ring_mushroom.png")
+    private static final Identifier[] BOAT_TEXTURES = new Identifier[]{
+            new Identifier(Habitat.MOD_ID, "textures/entity/boat/fairy_ring_mushroom.png")
     };
     protected final BoatModel modelBoat;
 
-    public HabitatBoatRenderer(EntityRendererProvider.Context context) {
+    public HabitatBoatRenderer(EntityRendererFactory.Context context) {
         super(context);
         modelBoat = new BoatModel(BoatModel.createBodyModel().bakeRoot());
         this.shadowRadius = 0.8F;
@@ -38,10 +38,10 @@ public class HabitatBoatRenderer extends EntityRenderer<HabitatBoat> {
             f1 = 0.0F;
 
         if (f > 0.0F)
-            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(Mth.sin(f) * f * f1 / 10.0F * (float) entityIn.getHurtDir()));
+            matrixStackIn.mulPose(Vector3f.XP.rotationDegrees(MathHelper.sin(f) * f * f1 / 10.0F * (float) entityIn.getHurtDir()));
 
         float f2 = entityIn.getBubbleAngle(partialTicks);
-        if (!Mth.equal(f2, 0.0F))
+        if (!MathHelper.equal(f2, 0.0F))
             matrixStackIn.mulPose(new Quaternion(new Vector3f(1.0F, 0.0F, 1.0F), entityIn.getBubbleAngle(partialTicks), true));
 
         matrixStackIn.scale(-1.0F, -1.0F, 1.0F);
@@ -59,7 +59,7 @@ public class HabitatBoatRenderer extends EntityRenderer<HabitatBoat> {
     }
 
     @Override
-    public ResourceLocation getTextureLocation(HabitatBoat entity) {
+    public Identifier getTextureLocation(HabitatBoat entity) {
         return BOAT_TEXTURES[entity.getHabitatBoatType().ordinal()];
     }
 }

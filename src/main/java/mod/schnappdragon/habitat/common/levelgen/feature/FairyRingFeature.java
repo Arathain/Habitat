@@ -4,28 +4,28 @@ import com.mojang.serialization.Codec;
 import mod.schnappdragon.habitat.common.block.FairyRingMushroomBlock;
 import mod.schnappdragon.habitat.core.registry.HabitatBlocks;
 import mod.schnappdragon.habitat.core.registry.HabitatConfiguredFeatures;
-import net.minecraft.core.BlockPos;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.chunk.ChunkGenerator;
-import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.block.BlockState;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.gen.chunk.ChunkGenerator;
+import net.minecraft.world.gen.feature.ConfiguredFeature;
+import net.minecraft.world.gen.feature.DefaultFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.Arrays;
 import java.util.Random;
 
-public class FairyRingFeature extends Feature<NoneFeatureConfiguration> {
-    public FairyRingFeature(Codec<NoneFeatureConfiguration> codec) {
+public class FairyRingFeature extends Feature<DefaultFeatureConfig> {
+    public FairyRingFeature(Codec<DefaultFeatureConfig> codec) {
         super(codec);
     }
 
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        ChunkGenerator generator = context.chunkGenerator();
-        WorldGenLevel world = context.level();
-        BlockPos pos = context.origin();
-        Random rand = context.random();
+    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
+        ChunkGenerator generator = context.getGenerator();
+        StructureWorldAccess world = context.getWorld();
+        BlockPos pos = context.getOrigin();
+        Random rand = context.getRandom();
 
         int[][] XZ_PAIRS = {
                 {1, 5}, {2, 5}, {3, 4}, {4, 4}, {4, 3}, {5, 2}, {5, 1}, {5, 0},
@@ -34,21 +34,21 @@ public class FairyRingFeature extends Feature<NoneFeatureConfiguration> {
                 {0, -5}, {1, -5}, {2, -5}, {3, -4}, {4, -4}, {4, -3}, {5, -2}, {5, -1}
         };
         int[] bigXZ = XZ_PAIRS[rand.nextInt(32)];
-        BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
+        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
 
         for (int[] XZ : XZ_PAIRS) {
             for (int y = 5; y >= -6; --y) {
-                blockpos$mutable.setWithOffset(pos, XZ[0], y, XZ[1]);
-                BlockState base = world.getBlockState(blockpos$mutable.below());
-                if (world.isEmptyBlock(blockpos$mutable) && base.canOcclude()) {
+                blockpos$mutable.set(pos, XZ[0], y, XZ[1]);
+                BlockState base = world.getBlockState(blockpos$mutable.down());
+                if (world.isAir(blockpos$mutable) && base.isOpaque()) {
                     if (Arrays.equals(XZ, bigXZ)) {
                         ConfiguredFeature<?, ?> configuredfeature = HabitatConfiguredFeatures.HUGE_FAIRY_RING_MUSHROOM;
 
-                        if (configuredfeature.place(world, generator, rand, blockpos$mutable))
+                        if (configuredfeature.generate(world, generator, rand, blockpos$mutable))
                             break;
                     }
 
-                    this.setBlock(world, blockpos$mutable, this.getMushroom(rand));
+                    this.setBlockState(world, blockpos$mutable, this.getMushroom(rand));
                     break;
                 }
             }
@@ -58,6 +58,6 @@ public class FairyRingFeature extends Feature<NoneFeatureConfiguration> {
     }
 
     private BlockState getMushroom(Random random) {
-        return HabitatBlocks.FAIRY_RING_MUSHROOM.get().defaultBlockState().setValue(FairyRingMushroomBlock.MUSHROOMS, 1 + random.nextInt(4));
+        return HabitatBlocks.FAIRY_RING_MUSHROOM.defaultBlockState().setValue(FairyRingMushroomBlock.MUSHROOMS, 1 + random.nextInt(4));
     }
 }

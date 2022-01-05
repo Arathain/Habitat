@@ -1,9 +1,8 @@
 package mod.schnappdragon.habitat.common.block;
 
-import mod.schnappdragon.habitat.core.tags.HabitatBlockTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.StatusEffect;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
@@ -21,7 +20,7 @@ public class BallCactusFlowerBlock extends HabitatFlowerBlock implements Bonemea
     protected static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 3.0D, 11.0D);
     private final BallCactusColor color;
 
-    public BallCactusFlowerBlock(BallCactusColor colorIn, Supplier<MobEffect> stewEffect, int stewEffectDuration, Properties properties) {
+    public BallCactusFlowerBlock(BallCactusColor colorIn, Supplier<StatusEffect> stewEffect, int stewEffectDuration, Properties properties) {
         super(stewEffect, stewEffectDuration, properties);
         this.color = colorIn;
     }

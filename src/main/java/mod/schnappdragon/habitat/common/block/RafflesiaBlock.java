@@ -4,8 +4,7 @@ import com.google.common.collect.Lists;
 import com.mojang.math.Vector3f;
 import mod.schnappdragon.habitat.common.block.entity.RafflesiaBlockEntity;
 import mod.schnappdragon.habitat.common.block.state.properties.HabitatBlockStateProperties;
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
-import mod.schnappdragon.habitat.core.tags.HabitatBlockTags;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.core.particles.ParticleOptions;
@@ -13,11 +12,11 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.StatusEffect;
+import net.minecraft.world.effect.StatusEffectInstance;
 import net.minecraft.world.entity.AreaEffectCloud;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
@@ -126,9 +125,9 @@ public class RafflesiaBlock extends BushBlock implements IForgeBlock, Bonemealab
                 j = tag.getInt("EffectDuration");
             }
 
-            MobEffect effect = MobEffect.byId(tag.getByte("EffectId"));
+            StatusEffect effect = StatusEffect.byId(tag.getByte("EffectId"));
             if (effect != null)
-                cloud.addEffect(new MobEffectInstance(effect, j));
+                cloud.addEffect(new StatusEffectInstance(effect, j));
         }
 
         worldIn.playSound(null, pos, HabitatSoundEvents.RAFFLESIA_SPEW.get(), SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
@@ -136,13 +135,13 @@ public class RafflesiaBlock extends BushBlock implements IForgeBlock, Bonemealab
     }
 
     public static ParticleOptions getParticle(ListTag effects) {
-        Collection<MobEffectInstance> effectInstances = Lists.newArrayList();
+        Collection<StatusEffectInstance> effectInstances = Lists.newArrayList();
         for (int i = 0; i < effects.size(); ++i) {
             CompoundTag tag = effects.getCompound(i);
 
-            MobEffect effect = MobEffect.byId(tag.getByte("EffectId"));
+            StatusEffect effect = StatusEffect.byId(tag.getByte("EffectId"));
             if (effect != null)
-                effectInstances.add(new MobEffectInstance(effect, 160));
+                effectInstances.add(new StatusEffectInstance(effect, 160));
         }
 
         return new DustParticleOptions(new Vector3f(Vec3.fromRGB24(PotionUtils.getColor(effectInstances))), 1.0F);
@@ -190,7 +189,7 @@ public class RafflesiaBlock extends BushBlock implements IForgeBlock, Bonemealab
                 ItemStack stew = new ItemStack(Items.SUSPICIOUS_STEW);
                 rafflesia.Effects.forEach(tag -> {
                     CompoundTag compound = (CompoundTag) tag;
-                    SuspiciousStewItem.saveMobEffect(stew, MobEffect.byId(compound.getByte("EffectId")), compound.getInt("EffectDuration"));
+                    SuspiciousStewItem.saveStatusEffect(stew, StatusEffect.byId(compound.getByte("EffectId")), compound.getInt("EffectDuration"));
                 });
                 worldIn.setBlockAndUpdate(pos, state.setValue(HAS_STEW, false));
                 rafflesia.Effects = getDefault();
@@ -243,7 +242,7 @@ public class RafflesiaBlock extends BushBlock implements IForgeBlock, Bonemealab
             BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
 
             for (int j = 0; j < 8; ++j) {
-                blockpos$mutable.setWithOffset(pos, Mth.nextInt(rand, 1, 2) - Mth.nextInt(rand, 1, 2), Mth.nextInt(rand, 1, 2) - Mth.nextInt(rand, 1, 2), Mth.nextInt(rand, 1, 2) - Mth.nextInt(rand, 1, 2));
+                blockpos$mutable.setWithOffset(pos, MathHelper.nextInt(rand, 1, 2) - MathHelper.nextInt(rand, 1, 2), MathHelper.nextInt(rand, 1, 2) - MathHelper.nextInt(rand, 1, 2), MathHelper.nextInt(rand, 1, 2) - MathHelper.nextInt(rand, 1, 2));
 
                 if ((worldIn.isEmptyBlock(blockpos$mutable) || worldIn.getBlockState(blockpos$mutable).getMaterial().isReplaceable()) && worldIn.getBlockState(blockpos$mutable.below()).is(HabitatBlockTags.RAFFLESIA_PLANTABLE_ON)) {
                     worldIn.setBlock(blockpos$mutable, state, 3);

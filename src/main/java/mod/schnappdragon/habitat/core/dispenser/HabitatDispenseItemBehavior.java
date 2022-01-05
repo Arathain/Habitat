@@ -11,7 +11,7 @@ import mod.schnappdragon.habitat.common.entity.vehicle.HabitatBoat;
 import mod.schnappdragon.habitat.core.registry.HabitatBlocks;
 import mod.schnappdragon.habitat.core.registry.HabitatItems;
 import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.BlockSource;
@@ -25,7 +25,7 @@ import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.effect.StatusEffect;
 import net.minecraft.world.entity.EntitySelector;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -91,7 +91,7 @@ public class HabitatDispenseItemBehavior {
                     ItemStack stew = new ItemStack(Items.SUSPICIOUS_STEW);
                     rafflesia.Effects.forEach(tag -> {
                         CompoundTag compound = (CompoundTag) tag;
-                        SuspiciousStewItem.saveMobEffect(stew, MobEffect.byId(compound.getByte("EffectId")), compound.getInt("EffectDuration"));
+                        SuspiciousStewItem.saveStatusEffect(stew, StatusEffect.byId(compound.getByte("EffectId")), compound.getInt("EffectDuration"));
                     });
                     worldIn.setBlockAndUpdate(pos, state.setValue(RafflesiaBlock.HAS_STEW, false));
                     rafflesia.Effects = RafflesiaBlock.getDefault();
@@ -217,7 +217,7 @@ public class HabitatDispenseItemBehavior {
                         worldIn.addFreshEntity(Pooka.convertRabbitToPooka(rabbit));
                         stack.shrink(1);
                         for (int j = 0; j < 8; ++j)
-                            worldIn.sendParticles(HabitatParticleTypes.FAIRY_RING_SPORE.get(), rabbit.getRandomX(0.5D), rabbit.getY(0.5D), rabbit.getRandomZ(0.5D), 0, rabbit.getRandom().nextGaussian(), 0.0D, rabbit.getRandom().nextGaussian(), 0.01D);
+                            worldIn.sendParticles(HabitatParticleTypes.FAIRY_RING_SPORE.get(), rabbit.getParticleX(0.5D), rabbit.getY(0.5D), rabbit.getParticleZ(0.5D), 0, rabbit.getRandom().nextGaussian(), 0.0D, rabbit.getRandom().nextGaussian(), 0.01D);
                         this.setSuccess(true);
                         return stack;
                     }

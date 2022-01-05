@@ -1,8 +1,9 @@
 package mod.schnappdragon.habitat.client.particle;
 
-import mod.schnappdragon.habitat.core.Habitat;
+import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.particle.BlockLeakParticle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;
@@ -12,7 +13,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Habitat.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = Habitat.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class HabitatParticleProviders {
     @SubscribeEvent(priority = EventPriority.LOWEST)
     public static void registerParticleFactories(ParticleFactoryRegisterEvent event) {

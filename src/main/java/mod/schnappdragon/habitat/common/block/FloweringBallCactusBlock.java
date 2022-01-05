@@ -1,6 +1,6 @@
 package mod.schnappdragon.habitat.common.block;
 
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;

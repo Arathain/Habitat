@@ -1,0 +1,42 @@
+{
+  "schemaVersion": 1,
+  "id": "habitat",
+  "version": "${version}",
+
+  "name": "Habitat",
+  "description": "Mod that aims to enhance the Overworld by adding content to old biomes and adding new biomes.",
+  "authors": [
+    "Schnappdragon",
+    "Edmord17",
+    "Arathain"
+  ],
+  "contact": {
+    "homepage": "",
+    "sources": ""
+  },
+
+  "license": "ARR",
+  "icon": "assets/habitat/logo.png",
+
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "mod.schnappdragon.habitat.Habitat"
+    ]
+  },
+  "mixins": [
+    "habitat.mixins.json"
+  ],
+
+  "accessWidener" : "habitat.accesswidener",
+
+  "depends": {
+    "fabricloader": ">=0.11.3",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "java": ">=17"
+  },
+  "suggests": {
+    "another-mod": "*"
+  }
+}

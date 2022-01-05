@@ -1,15 +1,21 @@
 {
   "required": true,
-  "package": "mod.schnappdragon.habitat.core.mixin",
-  "compatibilityLevel": "JAVA_17",
-  "refmap": "habitat.refmap.json",
+  "minVersion": "0.8",
+  "package": "mod.schnappdragon.habitat.mixin",
+  "compatibilityLevel": "JAVA_16",
   "mixins": [
+    "BlockTagsMixin",
+    "CriteriaInvoker",
+    "EntityModelLayersInvoker",
+    "EntityTypeTagsInvoker",
+    "ItemTagsInvoker",
     "NoBigMushroomsInStructuresMixin",
     "NoLakesInStructuresMixin",
     "NoTreesInStructuresMixin"
   ],
+  "client": [
+  ],
   "injectors": {
     "defaultRequire": 1
-  },
-  "minVersion": "0.8"
+  }
 }

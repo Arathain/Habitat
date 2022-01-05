@@ -1,6 +1,6 @@
 package mod.schnappdragon.habitat.common.entity.vehicle;
 
-import mod.schnappdragon.habitat.core.Habitat;
+import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -8,7 +8,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
@@ -45,7 +45,7 @@ public class HabitatBoat extends Boat {
 
     @Override
     public Item getDropItem() {
-        return ForgeRegistries.ITEMS.getValue(new ResourceLocation(Habitat.MODID, this.getHabitatBoatType().getName() + "_boat"));
+        return ForgeRegistries.ITEMS.getValue(new Identifier(Habitat.MOD_ID, this.getHabitatBoatType().getName() + "_boat"));
     }
 
     public void setBoatType(HabitatBoat.Type boatType) {
@@ -84,7 +84,7 @@ public class HabitatBoat extends Boat {
                     if (!this.level.isClientSide && !this.isRemoved()) {
                         this.kill();
                         if (this.level.getGameRules().getBoolean(GameRules.RULE_DOENTITYDROPS)) {
-                            Item planks = ForgeRegistries.ITEMS.getValue(new ResourceLocation(Habitat.MODID, this.getHabitatBoatType().getName() + "_planks"));
+                            Item planks = ForgeRegistries.ITEMS.getValue(new Identifier(Habitat.MOD_ID, this.getHabitatBoatType().getName() + "_planks"));
 
                             for (int i = 0; i < 3; ++i)
                                 this.spawnAtLocation(planks);

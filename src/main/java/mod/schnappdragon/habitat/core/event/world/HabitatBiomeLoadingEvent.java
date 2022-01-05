@@ -1,6 +1,6 @@
 package mod.schnappdragon.habitat.core.event.world;
 
-import mod.schnappdragon.habitat.core.Habitat;
+import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
 import mod.schnappdragon.habitat.core.registry.HabitatPlacedFeatures;
 import net.minecraft.core.Registry;
@@ -20,7 +20,7 @@ import net.minecraftforge.eventbus.api.EventPriority;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Habitat.MODID)
+@Mod.EventBusSubscriber(modid = Habitat.MOD_ID)
 public class HabitatBiomeLoadingEvent {
     @SubscribeEvent(priority = EventPriority.HIGH)
     public static void modifyBiomes(BiomeLoadingEvent event) {

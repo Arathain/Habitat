@@ -4,13 +4,13 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.mojang.serialization.Codec;
-import mod.schnappdragon.habitat.core.Habitat;
+import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatConfiguredStructures;
 import mod.schnappdragon.habitat.core.registry.HabitatStructures;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.resources.ResourceKey;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.biome.Biome;
@@ -30,7 +30,7 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-@Mod.EventBusSubscriber(modid = Habitat.MODID)
+@Mod.EventBusSubscriber(modid = Habitat.MOD_ID)
 public class HabitatStructureDimensionalSpacing {
     private static Method GETCODEC_METHOD;
 
@@ -52,7 +52,7 @@ public class HabitatStructureDimensionalSpacing {
 
             try {
                 if (GETCODEC_METHOD == null) GETCODEC_METHOD = ObfuscationReflectionHelper.findMethod(ChunkGenerator.class, "codec");
-                ResourceLocation cgRL = Registry.CHUNK_GENERATOR.getKey((Codec<? extends ChunkGenerator>) GETCODEC_METHOD.invoke(chunkGenerator));
+                Identifier cgRL = Registry.CHUNK_GENERATOR.getKey((Codec<? extends ChunkGenerator>) GETCODEC_METHOD.invoke(chunkGenerator));
                 if (cgRL != null && cgRL.getNamespace().equals("terraforged")) return;
             }
             catch (Exception e) {

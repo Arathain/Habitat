@@ -3,14 +3,14 @@ package mod.schnappdragon.habitat.common.entity.projectile;
 import mod.schnappdragon.habitat.core.misc.HabitatDamageSources;
 import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
 import mod.schnappdragon.habitat.core.registry.HabitatItems;
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -111,7 +111,7 @@ public class ThrownKabloomFruit extends ThrowableItemProjectile {
                         double dx = entity.getX() - this.getX();
                         double dy = entity.getEyeY() - this.getY();
                         double dz = entity.getZ() - this.getZ();
-                        double dres = Mth.sqrt((float) (dx * dx + dy * dy + dz * dz));
+                        double dres = MathHelper.sqrt((float) (dx * dx + dy * dy + dz * dz));
                         if (dres != 0.0D) {
                             dx = dx / dres;
                             dy = dy / dres;

@@ -2,9 +2,8 @@ package mod.schnappdragon.habitat.core.registry;
 
 import mod.schnappdragon.habitat.common.entity.vehicle.HabitatBoat;
 import mod.schnappdragon.habitat.common.item.*;
-import mod.schnappdragon.habitat.core.Habitat;
+import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.misc.HabitatFoods;
-import mod.schnappdragon.habitat.core.util.CompatHelper;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.common.ForgeSpawnEggItem;
@@ -15,7 +14,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.function.Supplier;
 
 public class HabitatItems {
-    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Habitat.MODID);
+    public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, Habitat.MOD_ID);
 
     public static final RegistryObject<Item> RAFFLESIA = ITEMS.register("rafflesia",
             () -> new ItemNameBlockItem(HabitatBlocks.RAFFLESIA.get(), new Item.Properties().tab(CreativeModeTab.TAB_DECORATIONS)));

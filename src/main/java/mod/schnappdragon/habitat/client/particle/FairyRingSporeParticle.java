@@ -2,15 +2,16 @@ package mod.schnappdragon.habitat.client.particle;
 
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
+import net.minecraft.client.world.ClientWorld;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.SimpleParticleType;
 
-public class FairyRingSporeParticle extends TextureSheetParticle {
-    private final SpriteSet spriteSetWithAge;
+public class FairyRingSporeParticle extends SpriteBillboardParticle {
+    private final SpriteProvider SpriteProviderWithAge;
 
-    private FairyRingSporeParticle(ClientLevel world, double x, double y, double z, double motionX, double motionY, double motionZ, SpriteSet spriteSetWithAge) {
+    private FairyRingSporeParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ, SpriteProvider SpriteProviderWithAge) {
         super(world, x, y, z);
-        this.spriteSetWithAge = spriteSetWithAge;
+        this.SpriteProviderWithAge = SpriteProviderWithAge;
         this.lifetime = (int) (60 + random.nextDouble() * 60);
         this.gravity = 0.0001F;
         this.friction = 0.99F;
@@ -22,7 +23,7 @@ public class FairyRingSporeParticle extends TextureSheetParticle {
         this.xd = motionX;
         this.yd = motionY;
         this.zd = motionZ;
-        this.setSpriteFromAge(spriteSetWithAge);
+        this.setSpriteFromAge(SpriteProviderWithAge);
     }
 
     public void tick() {
@@ -34,7 +35,7 @@ public class FairyRingSporeParticle extends TextureSheetParticle {
         else {
             this.yd -= this.gravity;
             this.move(this.xd, this.yd, this.zd);
-            this.setSpriteFromAge(this.spriteSetWithAge);
+            this.setSpriteFromAge(this.SpriteProviderWithAge);
 
             this.xd *= this.friction;
             this.yd *= this.friction;
@@ -51,14 +52,14 @@ public class FairyRingSporeParticle extends TextureSheetParticle {
     }
 
     public static class Provider implements ParticleProvider<SimpleParticleType> {
-        private final SpriteSet spriteSet;
+        private final SpriteProvider SpriteProvider;
 
-        public Provider(SpriteSet spriteSet) {
-            this.spriteSet = spriteSet;
+        public Provider(SpriteProvider SpriteProvider) {
+            this.SpriteProvider = SpriteProvider;
         }
 
         public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
-            return new FairyRingSporeParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, this.spriteSet);
+            return new FairyRingSporeParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, this.SpriteProvider);
         }
     }
 }

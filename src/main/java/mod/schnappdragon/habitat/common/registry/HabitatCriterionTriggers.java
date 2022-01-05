@@ -1,20 +1,20 @@
-package mod.schnappdragon.habitat.core.misc;
+package mod.schnappdragon.habitat.common.registry;
 
+import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.common.advancement.HabitatCriterionTrigger;
-import mod.schnappdragon.habitat.core.Habitat;
-import net.minecraft.advancements.CriteriaTriggers;
-import net.minecraft.resources.ResourceLocation;
+import mod.schnappdragon.habitat.mixin.CriteriaInvoker;
+import net.minecraft.util.Identifier;
 
 public class HabitatCriterionTriggers {
     public static final HabitatCriterionTrigger PACIFY_POOKA = new HabitatCriterionTrigger(get("pacify_pooka"));
     public static final HabitatCriterionTrigger FEED_PASSERINE = new HabitatCriterionTrigger(get("feed_passerine"));
 
     public static void registerCriteriaTriggers() {
-        CriteriaTriggers.register(PACIFY_POOKA);
-        CriteriaTriggers.register(FEED_PASSERINE);
+        CriteriaInvoker.register(PACIFY_POOKA);
+        CriteriaInvoker.register(FEED_PASSERINE);
     }
 
-    private static ResourceLocation get(String id) {
-        return new ResourceLocation(Habitat.MODID, id);
+    private static Identifier get(String id) {
+        return new Identifier(Habitat.MOD_ID, id);
     }
 }

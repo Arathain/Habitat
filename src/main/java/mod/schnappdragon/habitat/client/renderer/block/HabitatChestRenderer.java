@@ -4,10 +4,10 @@ import mod.schnappdragon.habitat.common.block.ChestVariant;
 import mod.schnappdragon.habitat.common.block.VariantChest;
 import mod.schnappdragon.habitat.common.block.entity.HabitatChestBlockEntity;
 import net.minecraft.client.renderer.Sheets;
-import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
+import net.minecraft.client.renderer.blockentity.BlockEntityRendererFactory;
 import net.minecraft.client.renderer.blockentity.ChestRenderer;
 import net.minecraft.client.resources.model.Material;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.properties.ChestType;
 
@@ -16,7 +16,7 @@ public class HabitatChestRenderer extends ChestRenderer<HabitatChestBlockEntity>
     public static Block block = null;
     public boolean xmasTextures;
 
-    public HabitatChestRenderer(BlockEntityRendererProvider.Context context) {
+    public HabitatChestRenderer(BlockEntityRendererFactory.Context context) {
         super(context);
         INSTANCE = this;
     }
@@ -46,7 +46,7 @@ public class HabitatChestRenderer extends ChestRenderer<HabitatChestBlockEntity>
         }
     }
 
-    private Material getRenderMaterial(ResourceLocation resource) {
+    private Material getRenderMaterial(Identifier resource) {
         return new Material(Sheets.CHEST_SHEET, resource);
     }
 }

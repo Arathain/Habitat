@@ -1,10 +1,10 @@
 package mod.schnappdragon.habitat.common.effect;
 
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectCategory;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffectCategory;
 
-public class HabitatEffect extends MobEffect {
-    public HabitatEffect(MobEffectCategory typeIn, int liquidColorIn) {
+public class HabitatEffect extends StatusEffect {
+    public HabitatEffect(StatusEffectCategory typeIn, int liquidColorIn) {
         super(typeIn, liquidColorIn);
     }
 }

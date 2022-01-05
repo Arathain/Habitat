@@ -2,11 +2,11 @@ package mod.schnappdragon.habitat.common.levelgen.feature.structure;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
-import mod.schnappdragon.habitat.core.Habitat;
+import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.world.level.NoiseColumn;
 import net.minecraft.world.level.biome.MobSpawnSettings;
 import net.minecraft.world.level.block.state.BlockState;
@@ -54,7 +54,7 @@ public class FairyRingStructure extends StructureFeature<JigsawConfiguration> {
         BlockPos blockpos = context.chunkPos().getMiddleBlockPosition(0);
         JigsawConfiguration newConfig = new JigsawConfiguration(
                 () -> context.registryAccess().ownedRegistryOrThrow(Registry.TEMPLATE_POOL_REGISTRY)
-                        .get(new ResourceLocation(Habitat.MODID, "fairy_ring/start_pool")),
+                        .get(new Identifier(Habitat.MOD_ID, "fairy_ring/start_pool")),
                 10
         );
         PieceGeneratorSupplier.Context<JigsawConfiguration> newContext = new PieceGeneratorSupplier.Context<>(

@@ -1,31 +1,57 @@
 package mod.schnappdragon.habitat.common.entity.monster;
 
+import mod.schnappdragon.habitat.HabitatConfig;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.HabitatCriterionTriggers;
 import mod.schnappdragon.habitat.core.HabitatConfig;
-import mod.schnappdragon.habitat.core.misc.HabitatCriterionTriggers;
 import mod.schnappdragon.habitat.core.registry.*;
-import mod.schnappdragon.habitat.core.tags.HabitatEntityTypeTags;
-import mod.schnappdragon.habitat.core.tags.HabitatItemTags;
+import mod.schnappdragon.habitat.common.registry.HabitatEntityTypeTags;
+import mod.schnappdragon.habitat.common.registry.HabitatItemTags;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.entity.EntityType;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.Shearable;
+import net.minecraft.entity.ai.goal.AnimalMateGoal;
+import net.minecraft.entity.ai.goal.LookAtEntityGoal;
+import net.minecraft.entity.ai.goal.SwimGoal;
+import net.minecraft.entity.ai.goal.WanderAroundFarGoal;
+import net.minecraft.entity.attribute.DefaultAttributeContainer;
+import net.minecraft.entity.attribute.EntityAttributes;
+import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.data.DataTracker;
+import net.minecraft.entity.data.TrackedData;
+import net.minecraft.entity.data.TrackedDataHandlerRegistry;
+import net.minecraft.entity.mob.MobEntity;
+import net.minecraft.entity.mob.Monster;
+import net.minecraft.entity.passive.RabbitEntity;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.nbt.NbtCompound;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
+import net.minecraft.recipe.Ingredient;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.sound.SoundEvent;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.Difficulty;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.World;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.*;
+import net.minecraft.world.effect.StatusEffect;
+import net.minecraft.world.effect.StatusEffectInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeSupplier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.*;
@@ -56,8 +82,8 @@ import java.util.List;
 import java.util.Random;
 import java.util.function.Predicate;
 
-public class Pooka extends Rabbit implements Enemy, IForgeShearable {
-    private static final EntityDataAccessor<Integer> DATA_STATE_ID = SynchedEntityData.defineId(Pooka.class, EntityDataSerializers.INT);
+public class Pooka extends RabbitEntity implements Monster, Shearable {
+    private static final TrackedData<Integer> DATA_STATE_ID = DataTracker.registerData(Pooka.class, TrackedDataHandlerRegistry.INTEGER);
     private int aidId;
     private int aidDuration;
     private int ailmentId;
@@ -65,49 +91,46 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
     private int forgiveTicks;
     private int aidTicks;
 
-    public Pooka(EntityType<? extends Pooka> entityType, Level world) {
+    public Pooka(EntityType<? extends Pooka> entityType, World world) {
         super(entityType, world);
-        this.xpReward = 3;
+        this.experiencePoints= 3;
     }
 
-    protected void registerGoals() {
-        this.goalSelector.addGoal(1, new FloatGoal(this));
-        this.goalSelector.addGoal(1, new Pooka.PookaPanicGoal(2.2D));
-        this.targetSelector.addGoal(1, (new Pooka.PookaHurtByTargetGoal()).setAlertOthers());
-        this.targetSelector.addGoal(2, new Pooka.PookaNearestAttackableTargetGoal<>(Player.class));
-        this.targetSelector.addGoal(2, new Pooka.PookaNearestAttackableTargetGoal<>(Mob.class, mob -> mob.getType().is(HabitatEntityTypeTags.POOKA_ATTACK_TARGETS)));
-        this.goalSelector.addGoal(2, new BreedGoal(this, 0.8D));
-        this.goalSelector.addGoal(3, new Pooka.PookaTemptGoal(1.25D, Ingredient.of(HabitatItemTags.POOKA_FOOD), false));
-        this.goalSelector.addGoal(4, new Pooka.PookaMeleeAttackGoal());
-        this.goalSelector.addGoal(4, new Pooka.PookaAvoidEntityGoal<>(Mob.class, 10.0F, 2.2D, 2.2D, mob -> mob.getType().is(HabitatEntityTypeTags.PACIFIED_POOKA_SCARED_BY)));
-        this.goalSelector.addGoal(6, new WaterAvoidingRandomStrollGoal(this, 0.6D));
-        this.goalSelector.addGoal(11, new LookAtPlayerGoal(this, Player.class, 10.0F));
+    protected void initGoals() {
+        this.goalSelector.add(1, new SwimGoal(this));
+        this.goalSelector.add(1, new Pooka.PookaPanicGoal(2.2D));
+        this.targetSelector.add(1, (new Pooka.PookaHurtByTargetGoal()).setGroupRevenge());
+        this.targetSelector.add(2, new Pooka.PookaNearestAttackableTargetGoal<>(PlayerEntity.class));
+        this.targetSelector.add(2, new Pooka.PookaNearestAttackableTargetGoal<>(MobEntity.class, mob -> mob.getType.isIn(HabitatEntityTypeTags.POOKA_ATTACK_TARGETS)));
+        this.goalSelector.add(2, new AnimalMateGoal(this, 0.8D));
+        this.goalSelector.add(3, new Pooka.PookaTemptGoal(1.25D, Ingredient.fromTag(HabitatItemTags.POOKA_FOOD), false));
+        this.goalSelector.add(4, new Pooka.PookaMeleeAttackGoal());
+        this.goalSelector.add(4, new Pooka.PookaAvoidEntityGoal<>(MobEntity.class, 10.0F, 2.2D, 2.2D, mob -> mob.getType().is(HabitatEntityTypeTags.PACIFIED_POOKA_SCARED_BY)));
+        this.goalSelector.add(6, new WanderAroundFarGoal(this, 0.6D));
+        this.goalSelector.add(11, new LookAtEntityGoal(this, PlayerEntity.class, 10.0F));
     }
 
-    public static AttributeSupplier.Builder registerAttributes() {
-        return Mob.createMobAttributes()
-                .add(Attributes.MAX_HEALTH, 3.0D)
-                .add(Attributes.MOVEMENT_SPEED, 0.3F)
-                .add(Attributes.ATTACK_DAMAGE, 5.0D)
-                .add(Attributes.ARMOR, 8.0D);
+    public static DefaultAttributeContainer.Builder registerPookaAttributes() {
+        return MobEntity.createMobAttributes().add(EntityAttributes.GENERIC_MAX_HEALTH, 3.0D).add(EntityAttributes.GENERIC_MOVEMENT_SPEED, 0.3F).add(EntityAttributes.GENERIC_ATTACK_DAMAGE, 5.0D).add(EntityAttributes.GENERIC_ARMOR, 8.0D);
     }
+
 
     @Override
-    protected int getExperienceReward(Player player) {
-        return this.xpReward;
+    protected int getXpToDrop(PlayerEntity player) {
+        return this.experiencePoints;
     }
 
     /*
      * Data Methods
      */
 
-    protected void defineSynchedData() {
-        super.defineSynchedData();
-        this.entityData.define(DATA_STATE_ID, 0);
+    protected void initDataTracker() {
+        super.initDataTracker();
+        this.dataTracker.startTracking(DATA_STATE_ID, 0);
     }
 
-    public void addAdditionalSaveData(CompoundTag compound) {
-        super.addAdditionalSaveData(compound);
+    public void writeCustomDataToNbt(NbtCompound compound) {
+        super.writeCustomDataToNbt(compound);
         compound.putInt("AidId", this.aidId);
         compound.putInt("AidDuration", this.aidDuration);
         compound.putInt("AilmentId", this.ailmentId);
@@ -117,8 +140,8 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
         compound.putInt("State", this.getStateId());
     }
 
-    public void readAdditionalSaveData(CompoundTag compound) {
-        super.readAdditionalSaveData(compound);
+    public void readCustomDataFromNbt(NbtCompound compound) {
+        super.readCustomDataFromNbt(compound);
         this.setAidAndAilment(
                 compound.getInt("AidId"),
                 compound.getInt("AidDuration"),
@@ -142,7 +165,7 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
     }
 
     private void setStateId(int state) {
-        this.entityData.set(DATA_STATE_ID, state);
+        this.dataTracker.set(DATA_STATE_ID, state);
     }
 
     public Pooka.State getState() {
@@ -150,7 +173,7 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
     }
 
     public int getStateId() {
-        return Mth.clamp(this.entityData.get(DATA_STATE_ID), 0, 2);
+        return MathHelper.clamp(this.dataTracker.get(DATA_STATE_ID), 0, 2);
     }
 
     public boolean isHostile() {
@@ -178,15 +201,15 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
      */
 
     @Override
-    public void jumpFromGround() {
-        if (!this.level.isClientSide)
-            this.level.broadcastEntityEvent(this, (byte) 14);
+    public void jump() {
+        if (!this.world.isClient)
+            this.world.sendEntityStatus(this, (byte) 14);
 
-        super.jumpFromGround();
+        super.jump();
     }
 
     @Override
-    public void customServerAiStep() {
+    public void mobTick() {
         if (this.forgiveTicks > 0)
             forgiveTicks--;
 
@@ -203,11 +226,11 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
             }
         }
 
-        super.customServerAiStep();
+        super.mobTick();
     }
 
     private void facePoint(double x, double z) {
-        this.setYRot((float) (Mth.atan2(z - this.getZ(), x - this.getX()) * (double) (180F / (float) Math.PI)) - 90.0F);
+        this.setYRot((float) (MathHelper.atan2(z - this.getZ(), x - this.getX()) * (double) (180F / (float) Math.PI)) - 90.0F);
     }
 
     /*
@@ -215,16 +238,16 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
      */
 
     @Override
-    public boolean canBeLeashed(Player player) {
+    public boolean canBeLeashedBy(PlayerEntity player) {
         return !this.isHostile();
     }
 
     @Override
-    protected void tickLeash() {
-        super.tickLeash();
+    protected void updateLeash() {
+        super.updateLeash();
 
         if (this.isHostile())
-            this.dropLeash(true, true);
+            this.detachLeash(true, true);
     }
 
     /*
@@ -232,7 +255,7 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
      */
 
     @Override
-    public boolean isShearable(@Nonnull ItemStack item, Level world, BlockPos pos) {
+    public boolean isShearable() {
         return this.isAlive() && !this.isHostile() && !this.isBaby();
     }
 
@@ -249,8 +272,8 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
         return Collections.singletonList(new ItemStack(HabitatItems.FAIRY_RING_MUSHROOM.get()));
     }
 
-    public static Rabbit convertPookaToRabbit(Pooka pooka) {
-        Rabbit rabbit = EntityType.RABBIT.create(pooka.level);
+    public static RabbitEntity convertPookaToRabbit(Pooka pooka) {
+        RabbitEntity rabbit = EntityType.RABBIT.create(pooka.level);
         rabbit.moveTo(pooka.getX(), pooka.getY(), pooka.getZ(), pooka.getYRot(), pooka.getXRot());
         rabbit.setHealth(pooka.getHealth());
         rabbit.yBodyRot = pooka.yBodyRot;
@@ -300,19 +323,19 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
     }
 
     protected SoundEvent getJumpSound() {
-        return HabitatSoundEvents.POOKA_JUMP.get();
+        return HabitatSoundEvents.POOKA_JUMP;
     }
 
     protected SoundEvent getAmbientSound() {
-        return HabitatSoundEvents.POOKA_AMBIENT.get();
+        return HabitatSoundEvents.POOKA_AMBIENT;
     }
 
     protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-        return HabitatSoundEvents.POOKA_HURT.get();
+        return HabitatSoundEvents.POOKA_HURT;
     }
 
     protected SoundEvent getDeathSound() {
-        return HabitatSoundEvents.POOKA_DEATH.get();
+        return HabitatSoundEvents.POOKA_DEATH;
     }
 
     /*
@@ -320,12 +343,12 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
      */
 
     @Override
-    public InteractionResult mobInteract(Player player, InteractionHand hand) {
-        ItemStack stack = player.getItemInHand(hand);
+    public ActionResult interactMob(PlayerEntity player, Hand hand) {
+        ItemStack stack = player.getStackInHand(hand);
         if (this.isFood(stack)) {
             if (this.isHostile()) {
-                if (!this.level.isClientSide) {
-                    this.setPersistenceRequired();
+                if (!this.world.isClient) {
+                    this.setPersistent();
                     this.usePlayerItem(player, hand, stack);
 
                     if (this.forgiveTicks == 0) {
@@ -333,45 +356,46 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
 
                         if ((this.isBaby() && roll > 0 || roll == 0) && this.isAlone()) {
                             this.setState(State.PACIFIED);
-                            this.playSound(HabitatSoundEvents.POOKA_PACIFY.get(), 1.0F, 1.0F);
+                            this.playSound(HabitatSoundEvents.POOKA_PACIFY, 1.0F, 1.0F);
                             HabitatCriterionTriggers.PACIFY_POOKA.trigger((ServerPlayer) player);
                             this.navigation.stop();
                             this.setTarget(null);
                             this.setLastHurtByMob(null);
-                            this.level.broadcastEntityEvent(this, (byte) 18);
+                            this.world.sendEntityStatus(this, (byte) 18);
                         } else
-                            this.level.broadcastEntityEvent(this, (byte) 12);
+                            this.world.sendEntityStatus(this, (byte) 12);
                     } else {
                         this.forgiveTicks -= (double) this.forgiveTicks * 0.1D;
-                        this.level.broadcastEntityEvent(this, (byte) 12);
+                        this.world.sendEntityStatus(this, (byte) 12);
                     }
 
                     this.gameEvent(GameEvent.MOB_INTERACT, this.eyeBlockPosition());
                 }
 
-                return InteractionResult.sidedSuccess(this.level.isClientSide);
+                return ActionResult.success(this.world.isClient);
             }
             else if (this.getHealth() < this.getMaxHealth() && stack.isEdible()) {
-                if (!this.level.isClientSide) {
+                if (!this.world.isClient) {
                     this.usePlayerItem(player, hand, stack);
                     this.heal(stack.getItem().getFoodProperties().getNutrition());
                     this.gameEvent(GameEvent.MOB_INTERACT, this.eyeBlockPosition());
                 }
 
-                return InteractionResult.sidedSuccess(this.level.isClientSide);
+                return ActionResult.success(this.world.isClient);
             }
         }
 
-        InteractionResult result = super.mobInteract(player, hand);
-        if (result.consumesAction())
-            this.setPersistenceRequired();
+        ActionResult result = super.interactMob(player, hand);
+        if (result.shouldSwingHand())
+            this.setPersistent();
 
         return result;
     }
 
-    protected void usePlayerItem(Player player, InteractionHand hand, ItemStack stack) {
+
+    protected void usePlayerItem(PlayerEntity player, Hand hand, ItemStack stack) {
         if (this.isFood(stack))
-            this.playSound(HabitatSoundEvents.POOKA_EAT.get(), 1.0F, 1.0F);
+            this.playSound(HabitatSoundEvents.POOKA_EAT, 1.0F, 1.0F);
 
         super.usePlayerItem(player, hand, stack);
     }
@@ -385,7 +409,7 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
         this.resetAidTimer();
         this.setForgiveTimer();
         this.setState(Pooka.State.HOSTILE);
-        this.level.broadcastEntityEvent(this, (byte) 13);
+        this.world.sendEntityStatus(this, (byte) 13);
     }
 
     /*
@@ -519,7 +543,7 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
             this.level.addFreshEntity(convertRabbitToPooka(rabbit));
 
             for (int i = 0; i < 8; i++)
-                ((ServerLevel) this.level).sendParticles(HabitatParticleTypes.FAIRY_RING_SPORE.get(), rabbit.getRandomX(0.5D), rabbit.getY(0.5D), rabbit.getRandomZ(0.5D), 0, rabbit.getRandom().nextGaussian(), 0.0D, rabbit.getRandom().nextGaussian(), 0.01D);
+                ((ServerLevel) this.level).sendParticles(HabitatParticleTypes.FAIRY_RING_SPORE.get(), rabbit.getParticleX(0.5D), rabbit.getY(0.5D), rabbit.getParticleZ(0.5D), 0, rabbit.getRandom().nextGaussian(), 0.0D, rabbit.getRandom().nextGaussian(), 0.01D);
             return false;
         }
 
@@ -530,10 +554,10 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
             this.playSound(HabitatSoundEvents.POOKA_ATTACK.get(), 1.0F, (this.random.nextFloat() - this.random.nextFloat()) * 0.2F + 1.0F);
 
             if (!this.isBaby() && entityIn instanceof LivingEntity) {
-                MobEffect effect = MobEffect.byId(ailmentId);
+                StatusEffect effect = StatusEffect.byId(ailmentId);
 
                 if (effect != null)
-                    ((LivingEntity) entityIn).addEffect(new MobEffectInstance(effect, ailmentDuration * (this.level.getDifficulty() == Difficulty.HARD ? 2 : 1)));
+                    ((LivingEntity) entityIn).addEffect(new StatusEffectInstance(effect, ailmentDuration * (this.level.getDifficulty() == Difficulty.HARD ? 2 : 1)));
             }
         }
 
@@ -545,9 +569,9 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
             return false;
         else {
             if (!this.level.isClientSide && this.isAlive()) {
-                MobEffect effect = MobEffect.byId(aidId);
+                StatusEffect effect = StatusEffect.byId(aidId);
                 if (!this.isBaby() && effect != null)
-                    this.addEffect(new MobEffectInstance(effect, aidDuration));
+                    this.addEffect(new StatusEffectInstance(effect, aidDuration));
 
                 if (this.isPacified() && source.getEntity() instanceof Player && !source.isCreativePlayer())
                     this.unpacify();
@@ -577,7 +601,7 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
             double d1 = vanillaPresets ? this.random.nextGaussian() * 0.02D : 0.0D;
             double d2 = this.random.nextGaussian() * (vanillaPresets ? 0.02D : 0.01D);
             double d3 = vanillaPresets ? 0.5D : 0.0D;
-            this.level.addParticle(particle, this.getRandomX(0.5D + d3), this.getRandomY() + d3, this.getRandomZ(0.5D + d3), d0, d1, d2);
+            this.level.addParticle(particle, this.getParticleX(0.5D + d3), this.getParticleY() + d3, this.getParticleZ(0.5D + d3), d0, d1, d2);
         }
     }
 
@@ -628,10 +652,10 @@ public class Pooka extends Rabbit implements Enemy, IForgeShearable {
         @Override
         public void tick() {
             super.tick();
-            MobEffect aid = MobEffect.byId(Pooka.this.aidId);
+            StatusEffect aid = StatusEffect.byId(Pooka.this.aidId);
 
             if (!Pooka.this.isBaby() && Pooka.this.aidTicks == 0 && aid != null) {
-                this.player.addEffect(new MobEffectInstance(aid, Pooka.this.aidDuration * 2));
+                this.player.addEffect(new StatusEffectInstance(aid, Pooka.this.aidDuration * 2));
                 Pooka.this.setAidTimer();
             }
         }

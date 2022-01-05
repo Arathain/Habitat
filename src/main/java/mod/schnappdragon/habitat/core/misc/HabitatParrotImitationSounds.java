@@ -1,7 +1,7 @@
 package mod.schnappdragon.habitat.core.misc;
 
 import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Parrot;

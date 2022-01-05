@@ -5,13 +5,15 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mod.schnappdragon.habitat.common.entity.monster.Pooka;
 import net.minecraft.client.model.EntityModel;
+import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
-import net.minecraft.util.Mth;
+import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.util.MathHelper;
 
 public class PookaModel<T extends Pooka> extends EntityModel<T> {
     private final ModelPart leftRearFoot;
@@ -100,7 +102,7 @@ public class PookaModel<T extends Pooka> extends EntityModel<T> {
         this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
         this.rightEar.yRot = this.head.yRot - 0.2617994F;
         this.leftEar.yRot = this.head.yRot + 0.2617994F;
-        this.jumpRotation = Mth.sin(pooka.getJumpCompletion(f) * (float) Math.PI);
+        this.jumpRotation = MathHelper.sin(pooka.getJumpCompletion(f) * (float) Math.PI);
         this.leftHaunch.xRot = (this.jumpRotation * 50.0F - 21.0F) * ((float) Math.PI / 180F);
         this.rightHaunch.xRot = this.leftHaunch.xRot;
         this.leftRearFoot.xRot = this.jumpRotation * 50.0F * ((float) Math.PI / 180F);
@@ -110,6 +112,6 @@ public class PookaModel<T extends Pooka> extends EntityModel<T> {
     }
 
     public void prepareMobModel(Pooka pooka, float limbSwing, float limbSwingAmount, float partialTick) {
-        this.jumpRotation = Mth.sin(pooka.getJumpCompletion(partialTick) * (float) Math.PI);
+        this.jumpRotation = MathHelper.sin(pooka.getJumpCompletion(partialTick) * (float) Math.PI);
     }
 }

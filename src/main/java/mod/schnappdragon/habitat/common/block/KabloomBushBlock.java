@@ -2,12 +2,12 @@ package mod.schnappdragon.habitat.common.block;
 
 import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruit;
 import mod.schnappdragon.habitat.core.registry.HabitatItems;
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.util.Mth;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -145,7 +145,7 @@ public class KabloomBushBlock extends BushBlock implements BonemealableBlock {
     }
 
     public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
-        worldIn.setBlock(pos, state.setValue(AGE, Math.min(7, state.getValue(AGE) + Mth.nextInt(rand, 2, 4))), 2);
+        worldIn.setBlock(pos, state.setValue(AGE, Math.min(7, state.getValue(AGE) + MathHelper.nextInt(rand, 2, 4))), 2);
     }
 
     /*

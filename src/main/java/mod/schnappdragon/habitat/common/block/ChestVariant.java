@@ -1,7 +1,7 @@
 package mod.schnappdragon.habitat.common.block;
 
-import mod.schnappdragon.habitat.core.Habitat;
-import net.minecraft.resources.ResourceLocation;
+import mod.schnappdragon.habitat.Habitat;
+import net.minecraft.resources.Identifier;
 
 public enum ChestVariant {
     FAIY_RING_MUSHROOM_NORMAL("fairy_ring_mushroom"),
@@ -17,15 +17,15 @@ public enum ChestVariant {
         this(name, false);
     }
 
-    public ResourceLocation getSingle() {
-        return new ResourceLocation(Habitat.MODID, "entity/chest/" + this.location);
+    public Identifier getSingle() {
+        return new Identifier(Habitat.MOD_ID, "entity/chest/" + this.location);
     }
 
-    public ResourceLocation getRight() {
-        return new ResourceLocation(Habitat.MODID, "entity/chest/" + this.location + "_right");
+    public Identifier getRight() {
+        return new Identifier(Habitat.MOD_ID, "entity/chest/" + this.location + "_right");
     }
 
-    public ResourceLocation getLeft() {
-        return new ResourceLocation(Habitat.MODID, "entity/chest/" + this.location + "_left");
+    public Identifier getLeft() {
+        return new Identifier(Habitat.MOD_ID, "entity/chest/" + this.location + "_left");
     }
 }

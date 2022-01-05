@@ -4,47 +4,47 @@ import com.mojang.serialization.Codec;
 import mod.schnappdragon.habitat.common.block.SlimeFernBlock;
 import mod.schnappdragon.habitat.common.block.WallSlimeFernBlock;
 import mod.schnappdragon.habitat.core.registry.HabitatBlocks;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.tags.BlockTags;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.feature.Feature;
-import net.minecraft.world.level.levelgen.feature.FeaturePlaceContext;
-import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.block.BlockState;
+import net.minecraft.tag.BlockTags;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
+import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.gen.feature.DefaultFeatureConfig;
+import net.minecraft.world.gen.feature.Feature;
+import net.minecraft.world.gen.feature.util.FeatureContext;
 
 import java.util.Random;
 
-public class SlimeFernFeature extends Feature<NoneFeatureConfiguration> {
-    public SlimeFernFeature(Codec<NoneFeatureConfiguration> codec) {
+public class SlimeFernFeature extends Feature<DefaultFeatureConfig> {
+    public SlimeFernFeature(Codec<DefaultFeatureConfig> codec) {
         super(codec);
     }
 
-    public boolean place(FeaturePlaceContext<NoneFeatureConfiguration> context) {
-        WorldGenLevel world = context.level();
-        BlockPos pos = context.origin();
-        Random rand = context.random();
+    public boolean generate(FeatureContext<DefaultFeatureConfig> context) {
+        StructureWorldAccess world = context.getWorld();
+        BlockPos pos = context.getOrigin();
+        Random rand = context.getRandom();
 
         int i = 0;
-        BlockPos centrePos = pos.offset(7, 0, 7);
-        BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
+        BlockPos centrePos = pos.add(7, 0, 7);
+        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
         Direction[] directions = new Direction[]{Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP};
 
         for (int j = 0; j < 64; ++j) {
-            blockpos$mutable.setWithOffset(centrePos, rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4));
+            blockpos$mutable.set(centrePos, rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4), rand.nextInt(4) - rand.nextInt(4));
 
-            if (world.isEmptyBlock(blockpos$mutable)) {
+            if (world.isAir(blockpos$mutable)) {
                 for (Direction dir : directions) {
-                    if (world.getBlockState(blockpos$mutable.relative(dir)).is(BlockTags.BASE_STONE_OVERWORLD)) {
+                    if (world.getBlockState(blockpos$mutable.offset(dir)).isIn(BlockTags.BASE_STONE_OVERWORLD)) {
                         BlockState state;
                         if (dir == Direction.DOWN)
-                            state = HabitatBlocks.SLIME_FERN.get().defaultBlockState();
+                            state = HabitatBlocks.SLIME_FERN.defaultBlockState();
                         else if (dir == Direction.UP)
-                            state = HabitatBlocks.SLIME_FERN.get().defaultBlockState().setValue(SlimeFernBlock.ON_CEILING, true);
+                            state = HabitatBlocks.SLIME_FERN.defaultBlockState().setValue(SlimeFernBlock.ON_CEILING, true);
                         else
-                            state = HabitatBlocks.WALL_SLIME_FERN.get().defaultBlockState().setValue(WallSlimeFernBlock.HORIZONTAL_FACING, dir.getOpposite());
+                            state = HabitatBlocks.WALL_SLIME_FERN.defaultBlockState().setValue(WallSlimeFernBlock.HORIZONTAL_FACING, dir.getOpposite());
 
-                        this.setBlock(world, blockpos$mutable, state);
+                        this.setBlockState(world, blockpos$mutable, state);
 
                         ++i;
                         break;

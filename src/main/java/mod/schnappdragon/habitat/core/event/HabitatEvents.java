@@ -2,12 +2,12 @@ package mod.schnappdragon.habitat.core.event;
 
 import mod.schnappdragon.habitat.common.entity.ai.goal.RabbitAvoidEntityGoal;
 import mod.schnappdragon.habitat.common.entity.monster.Pooka;
-import mod.schnappdragon.habitat.core.Habitat;
+import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatEffects;
-import mod.schnappdragon.habitat.core.tags.HabitatEntityTypeTags;
+import mod.schnappdragon.habitat.common.registry.HabitatEntityTypeTags;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.stats.Stats;
-import net.minecraft.util.Mth;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -19,7 +19,7 @@ import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
-@Mod.EventBusSubscriber(modid = Habitat.MODID)
+@Mod.EventBusSubscriber(modid = Habitat.MOD_ID)
 public class HabitatEvents {
 
     /*
@@ -46,7 +46,7 @@ public class HabitatEvents {
             DamageSource source = event.getSource();
 
             int lvl = Math.min(livingEntity.getEffect(HabitatEffects.BLAST_ENDURANCE.get()).getAmplifier(), 11);
-            float dmg = Mth.floor(event.getAmount() * (0.88F - 0.08F * lvl));
+            float dmg = MathHelper.floor(event.getAmount() * (0.88F - 0.08F * lvl));
             int res = (int) (event.getAmount() - dmg);
 
             event.setAmount(dmg);

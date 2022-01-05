@@ -1,0 +1,4 @@
+accessWidener	v1	named
+
+extendable class Lnet/minecraft/client/particle/BlockLeakParticle$Landing
+extendable class Lnet/minecraft/client/particle/BlockLeakParticle$Falling

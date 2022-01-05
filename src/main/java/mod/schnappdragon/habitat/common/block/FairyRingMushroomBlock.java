@@ -5,14 +5,14 @@ import mod.schnappdragon.habitat.common.entity.monster.Pooka;
 import mod.schnappdragon.habitat.core.registry.HabitatConfiguredFeatures;
 import mod.schnappdragon.habitat.core.registry.HabitatItems;
 import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.DustParticleOptions;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
-import net.minecraft.util.Mth;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
@@ -80,7 +80,7 @@ public class FairyRingMushroomBlock extends BushBlock implements BonemealableBlo
             worldIn.addFreshEntity(Pooka.convertRabbitToPooka(rabbit));
 
             for (int i = 0; i < 8; i++)
-                ((ServerLevel) worldIn).sendParticles(HabitatParticleTypes.FAIRY_RING_SPORE.get(), rabbit.getRandomX(0.5D), rabbit.getY(0.5D), rabbit.getRandomZ(0.5D), 0, rabbit.getRandom().nextGaussian(), 0.0D, rabbit.getRandom().nextGaussian(), 0.01D);
+                ((ServerLevel) worldIn).sendParticles(HabitatParticleTypes.FAIRY_RING_SPORE.get(), rabbit.getParticleX(0.5D), rabbit.getY(0.5D), rabbit.getParticleZ(0.5D), 0, rabbit.getRandom().nextGaussian(), 0.0D, rabbit.getRandom().nextGaussian(), 0.01D);
         }
     }
 
@@ -166,7 +166,7 @@ public class FairyRingMushroomBlock extends BushBlock implements BonemealableBlo
 
     public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
         if (state.getValue(MUSHROOMS) < 4)
-            worldIn.setBlock(pos, state.setValue(MUSHROOMS, Math.min(4, state.getValue(MUSHROOMS) + Mth.nextInt(rand, 1, 2))), 2);
+            worldIn.setBlock(pos, state.setValue(MUSHROOMS, Math.min(4, state.getValue(MUSHROOMS) + MathHelper.nextInt(rand, 1, 2))), 2);
         else
             growHugeMushroom(worldIn, rand, pos, state);
     }

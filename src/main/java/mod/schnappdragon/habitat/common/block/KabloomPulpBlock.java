@@ -2,7 +2,7 @@ package mod.schnappdragon.habitat.common.block;
 
 import mod.schnappdragon.habitat.core.registry.HabitatEffects;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.StatusEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.BlockGetter;
@@ -31,7 +31,7 @@ public class KabloomPulpBlock extends HalfTransparentBlock {
 
         if (entityIn instanceof LivingEntity) {
             LivingEntity living = (LivingEntity) entityIn;
-            living.addEffect(new MobEffectInstance(HabitatEffects.BLAST_ENDURANCE.get(), 100));
+            living.addEffect(new StatusEffectInstance(HabitatEffects.BLAST_ENDURANCE.get(), 100));
         }
     }
 }

@@ -1,16 +1,16 @@
 package mod.schnappdragon.habitat.common.item;
 
 import mod.schnappdragon.habitat.common.entity.monster.Pooka;
-import mod.schnappdragon.habitat.core.HabitatConfig;
+import mod.schnappdragon.habitat.HabitatConfig;
 import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
-import mod.schnappdragon.habitat.core.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.effect.StatusEffect;
+import net.minecraft.world.effect.StatusEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.animal.MushroomCow;
@@ -36,7 +36,7 @@ public class FairyRingMushroomItem extends BlockItem {
         if (target instanceof MushroomCow mooshroom && ((MushroomCow) target).getMushroomType() == MushroomCow.MushroomType.BROWN) {
             if (!playerIn.level.isClientSide) {
                 if (mooshroom.effect == null) {
-                    Pair<MobEffect, Integer> effect = getStewEffect();
+                    Pair<StatusEffect, Integer> effect = getStewEffect();
 
                     mooshroom.effect = effect.getLeft();
                     mooshroom.effectDuration = effect.getRight();
@@ -45,7 +45,7 @@ public class FairyRingMushroomItem extends BlockItem {
                         stack.shrink(1);
 
                     for (int i = 0; i < 4; ++i) {
-                        ((ServerLevel) playerIn.level).sendParticles(ParticleTypes.EFFECT, mooshroom.getRandomX(0.5D), mooshroom.getY(0.5D), mooshroom.getRandomZ(0.5D), 0, 0.0D, mooshroom.getRandom().nextDouble(), 0.0D, 0.2D);
+                        ((ServerLevel) playerIn.level).sendParticles(ParticleTypes.EFFECT, mooshroom.getParticleX(0.5D), mooshroom.getY(0.5D), mooshroom.getParticleZ(0.5D), 0, 0.0D, mooshroom.getRandom().nextDouble(), 0.0D, 0.2D);
                         ((ServerLevel) playerIn.level).sendParticles(HabitatParticleTypes.FAIRY_RING_SPORE.get(), mooshroom.getX() + mooshroom.getRandom().nextDouble() / 2.0D, mooshroom.getY(0.5D), mooshroom.getZ() + mooshroom.getRandom().nextDouble() / 2.0D, 0, mooshroom.getRandom().nextGaussian(), 0.0D, mooshroom.getRandom().nextGaussian(), 0.01D);
                     }
 
@@ -78,11 +78,11 @@ public class FairyRingMushroomItem extends BlockItem {
         return super.interactLivingEntity(stack, playerIn, target, hand);
     }
 
-    public static Pair<MobEffect, Integer> getStewEffect() {
+    public static Pair<StatusEffect, Integer> getStewEffect() {
         List<String> stewEffectPairs = Arrays.asList(StringUtils.deleteWhitespace(HabitatConfig.COMMON.suspiciousStewEffects.get()).split(","));
         String[] pair = stewEffectPairs.get((int) (Math.random() * stewEffectPairs.size())).split(":");
-        MobEffect effect = MobEffect.byId(Integer.parseInt(pair[0]));
+        StatusEffect effect = StatusEffect.byId(Integer.parseInt(pair[0]));
 
-        return Pair.of(effect != null ? effect : MobEffects.GLOWING, Integer.parseInt(pair[1]) * 20);
+        return Pair.of(effect != null ? effect : StatusEffects.GLOWING, Integer.parseInt(pair[1]) * 20);
     }
 }
