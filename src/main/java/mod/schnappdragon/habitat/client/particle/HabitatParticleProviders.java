@@ -1,9 +1,8 @@
 package mod.schnappdragon.habitat.client.particle;
 
 import mod.schnappdragon.habitat.Habitat;
-import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
+import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.BlockLeakParticle;
 import net.minecraft.client.particle.ParticleEngine;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleType;

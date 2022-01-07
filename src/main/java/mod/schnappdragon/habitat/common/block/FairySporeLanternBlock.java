@@ -1,6 +1,6 @@
 package mod.schnappdragon.habitat.common.block;
 
-import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
+import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.LanternBlock;

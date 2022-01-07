@@ -1,8 +1,8 @@
 package mod.schnappdragon.habitat.common.item;
 
-import mod.schnappdragon.habitat.common.entity.monster.Pooka;
+import mod.schnappdragon.habitat.common.entity.monster.PookaEntity;
 import mod.schnappdragon.habitat.HabitatConfig;
-import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
+import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
 import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -64,7 +64,7 @@ public class FairyRingMushroomItem extends BlockItem {
                 playerIn.level.gameEvent(GameEvent.MOB_INTERACT, rabbit.eyeBlockPosition());
                 rabbit.playSound(HabitatSoundEvents.RABBIT_CONVERTED_TO_POOKA.get(), 1.0F, rabbit.isBaby() ? (rabbit.getRandom().nextFloat() - rabbit.getRandom().nextFloat()) * 0.2F + 1.5F : (rabbit.getRandom().nextFloat() - rabbit.getRandom().nextFloat()) * 0.2F + 1.0F);
                 rabbit.discard();
-                Pooka pooka = Pooka.convertRabbitToPooka(rabbit);
+                PookaEntity pooka = PookaEntity.convertRabbitToPooka(rabbit);
                 playerIn.level.addFreshEntity(pooka);
                 playerIn.level.broadcastEntityEvent(pooka, (byte) 15);
 

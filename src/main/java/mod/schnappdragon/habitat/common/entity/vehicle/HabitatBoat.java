@@ -3,6 +3,7 @@ package mod.schnappdragon.habitat.common.entity.vehicle;
 import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.syncher.EntityDataAccessor;
@@ -10,6 +11,7 @@ import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
 import net.minecraft.resources.Identifier;
 import net.minecraft.tags.FluidTags;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.vehicle.Boat;
@@ -22,7 +24,7 @@ import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import net.minecraftforge.registries.ForgeRegistries;
 
-public class HabitatBoat extends Boat {
+public class HabitatBoat extends BoatEntity {
     private static final EntityDataAccessor<Integer> BOAT_TYPE = SynchedEntityData.defineId(HabitatBoat.class, EntityDataSerializers.INT);
 
     public HabitatBoat(EntityType<? extends Boat> typeIn, Level worldIn) {
@@ -33,7 +35,7 @@ public class HabitatBoat extends Boat {
     public HabitatBoat(Level worldIn, double x, double y, double z) {
         this(HabitatEntityTypes.BOAT.get(), worldIn);
         this.setPos(x, y, z);
-        this.setDeltaMovement(Vec3.ZERO);
+        this.setDeltaMovement(Vec3d.ZERO);
         this.xo = x;
         this.yo = y;
         this.zo = z;
@@ -53,8 +55,8 @@ public class HabitatBoat extends Boat {
     }
 
     @Override
-    protected void defineSynchedData() {
-        super.defineSynchedData();
+    protected void initDataTracker() {
+        super.initDataTracker();
         this.entityData.define(BOAT_TYPE, Type.FAIRY_RING_MUSHROOM.ordinal());
     }
 

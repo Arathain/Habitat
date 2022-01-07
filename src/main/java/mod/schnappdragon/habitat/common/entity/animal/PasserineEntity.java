@@ -4,7 +4,7 @@ import mod.schnappdragon.habitat.common.registry.HabitatBlockTags;
 import mod.schnappdragon.habitat.common.registry.HabitatCriterionTriggers;
 import mod.schnappdragon.habitat.core.misc.HabitatDamageSources;
 import mod.schnappdragon.habitat.client.particle.ColorableParticleEffect;
-import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
+import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
 import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import mod.schnappdragon.habitat.common.registry.HabitatItemTags;
 import net.minecraft.block.BlockState;

@@ -1,7 +1,7 @@
 package mod.schnappdragon.habitat.common.block;
 
 import mod.schnappdragon.habitat.core.registry.HabitatBlocks;
-import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
+import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.server.level.ServerLevel;

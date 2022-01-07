@@ -3,7 +3,7 @@ package mod.schnappdragon.habitat.client.model;
 import com.google.common.collect.ImmutableList;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import mod.schnappdragon.habitat.common.entity.monster.Pooka;
+import mod.schnappdragon.habitat.common.entity.monster.PookaEntity;
 import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.ModelPart;
 import net.minecraft.client.model.geom.ModelPart;
@@ -15,7 +15,7 @@ import net.minecraft.client.model.geom.builders.PartDefinition;
 import net.minecraft.client.render.entity.model.EntityModel;
 import net.minecraft.util.MathHelper;
 
-public class PookaModel<T extends Pooka> extends EntityModel<T> {
+public class PookaModel<T extends PookaEntity> extends EntityModel<T> {
     private final ModelPart leftRearFoot;
     private final ModelPart rightRearFoot;
     private final ModelPart leftHaunch;
@@ -94,7 +94,7 @@ public class PookaModel<T extends Pooka> extends EntityModel<T> {
         }
     }
 
-    public void setupAnim(Pooka pooka, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+    public void setupAnim(PookaEntity pooka, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
         float f = ageInTicks - (float) pooka.tickCount;
         this.head.xRot = headPitch * ((float) Math.PI / 180F);
         this.rightEar.xRot = this.head.xRot;
@@ -111,7 +111,7 @@ public class PookaModel<T extends Pooka> extends EntityModel<T> {
         this.rightFrontLeg.xRot = this.leftFrontLeg.xRot;
     }
 
-    public void prepareMobModel(Pooka pooka, float limbSwing, float limbSwingAmount, float partialTick) {
+    public void prepareMobModel(PookaEntity pooka, float limbSwing, float limbSwingAmount, float partialTick) {
         this.jumpRotation = MathHelper.sin(pooka.getJumpCompletion(partialTick) * (float) Math.PI);
     }
 }

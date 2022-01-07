@@ -1,7 +1,7 @@
 package mod.schnappdragon.habitat.core.event;
 
 import mod.schnappdragon.habitat.common.entity.ai.goal.RabbitAvoidEntityGoal;
-import mod.schnappdragon.habitat.common.entity.monster.Pooka;
+import mod.schnappdragon.habitat.common.entity.monster.PookaEntity;
 import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatEffects;
 import mod.schnappdragon.habitat.common.registry.HabitatEntityTypeTags;
@@ -31,7 +31,7 @@ public class HabitatEvents {
         Entity entity = event.getEntity();
         if (entity.getType() == EntityType.RABBIT && HabitatEntityTypeTags.POOKA_ATTACK_TARGETS.contains(EntityType.RABBIT)) {
             Rabbit rabbit = (Rabbit) entity;
-            rabbit.goalSelector.addGoal(4, new RabbitAvoidEntityGoal<>(rabbit, Pooka.class, 2.25F, 2.2D, 2.2D));
+            rabbit.goalSelector.addGoal(4, new RabbitAvoidEntityGoal<>(rabbit, PookaEntity.class, 2.25F, 2.2D, 2.2D));
         }
     }
 

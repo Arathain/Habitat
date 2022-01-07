@@ -2,6 +2,7 @@ package mod.schnappdragon.habitat.common.registry;
 
 import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.common.entity.animal.PasserineEntity;
+import mod.schnappdragon.habitat.common.entity.monster.PookaEntity;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricDefaultAttributeRegistry;
 import net.fabricmc.fabric.api.object.builder.v1.entity.FabricEntityTypeBuilder;
 import net.minecraft.block.entity.BlockEntity;
@@ -18,7 +19,8 @@ public class HabitatEntities {
     private static final Map<EntityType<?>, Identifier> ENTITY_TYPES = new LinkedHashMap<>();
     private static final Map<BlockEntityType<?>, Identifier> BLOCK_ENTITY_TYPES = new LinkedHashMap<>();
 
-    public static final EntityType<PasserineEntity> NUDIFAE = createEntity("passerine", PasserineEntity.createPasserineAttributes(), FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, PasserineEntity::new).dimensions(EntityDimensions.fixed(0.5F, 0.5F)).trackRangeChunks(8).build());
+    public static final EntityType<PasserineEntity> PASSERINE = createEntity("passerine", PasserineEntity.createPasserineAttributes(), FabricEntityTypeBuilder.create(SpawnGroup.CREATURE, PasserineEntity::new).dimensions(EntityDimensions.fixed(0.5F, 0.5F)).trackRangeChunks(8).build());
+    public static final EntityType<PookaEntity> POOKA = createEntity("pooka", PookaEntity.registerPookaAttributes(), FabricEntityTypeBuilder.create(SpawnGroup.MONSTER, PookaEntity::new).dimensions(EntityDimensions.fixed(0.4F, 0.5F)).trackRangeChunks(8).build());
 
 
     private static <T extends Entity> EntityType<T> createEntity(String name, EntityType<T> type) {

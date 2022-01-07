@@ -1,7 +1,7 @@
 package mod.schnappdragon.habitat.core.misc;
 
 import mod.schnappdragon.habitat.common.entity.animal.PasserineEntity;
-import mod.schnappdragon.habitat.common.entity.monster.Pooka;
+import mod.schnappdragon.habitat.common.entity.monster.PookaEntity;
 import mod.schnappdragon.habitat.common.levelgen.feature.structure.FairyRingStructure;
 import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
@@ -18,7 +18,7 @@ import net.minecraftforge.fml.common.Mod;
 @Mod.EventBusSubscriber(modid = Habitat.MOD_ID)
 public class HabitatSpawns {
     public static void registerSpawns() {
-        registerSpawn(HabitatEntityTypes.POOKA.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, Pooka::checkPookaSpawnRules);
+        registerSpawn(HabitatEntityTypes.POOKA.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING_NO_LEAVES, PookaEntity::checkPookaSpawnRules);
         registerSpawn(HabitatEntityTypes.PASSERINE.get(), SpawnPlacements.Type.ON_GROUND, Heightmap.Types.MOTION_BLOCKING, PasserineEntity::checkPasserineSpawnRules);
     }
 

@@ -1,4 +1,4 @@
-package mod.schnappdragon.habitat.core.registry;
+package mod.schnappdragon.habitat.common.registry;
 
 import com.mojang.serialization.Codec;
 import mod.schnappdragon.habitat.client.particle.ColorableParticleEffect;

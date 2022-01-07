@@ -1,7 +1,7 @@
 package mod.schnappdragon.habitat.client.particle;
 
 import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
-import mod.schnappdragon.habitat.core.registry.HabitatParticleTypes;
+import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
 import net.minecraft.client.particle.BlockLeakParticle;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.particle.ParticleFactory;
