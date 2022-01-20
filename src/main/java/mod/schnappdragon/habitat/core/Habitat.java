@@ -1,9 +1,7 @@
 package mod.schnappdragon.habitat.core;
 
 import mod.schnappdragon.habitat.client.renderer.HabitatRenderLayers;
-import mod.schnappdragon.habitat.common.registry.HabitatCriterionTriggers;
-import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
-import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
+import mod.schnappdragon.habitat.common.registry.*;
 import mod.schnappdragon.habitat.core.api.conditions.RecipeConditions;
 import mod.schnappdragon.habitat.core.dispenser.HabitatDispenseItemBehavior;
 import mod.schnappdragon.habitat.core.misc.*;

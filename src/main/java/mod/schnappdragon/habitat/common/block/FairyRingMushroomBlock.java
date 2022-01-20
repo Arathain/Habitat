@@ -2,7 +2,7 @@ package mod.schnappdragon.habitat.common.block;
 
 import mod.schnappdragon.habitat.common.block.state.properties.HabitatBlockStateProperties;
 import mod.schnappdragon.habitat.common.entity.monster.PookaEntity;
-import mod.schnappdragon.habitat.core.registry.HabitatConfiguredFeatures;
+import mod.schnappdragon.habitat.common.registry.HabitatConfiguredFeatures;
 import mod.schnappdragon.habitat.core.registry.HabitatItems;
 import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
 import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;

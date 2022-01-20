@@ -1,5 +1,6 @@
 package mod.schnappdragon.habitat.common.entity.monster;
 
+import mod.schnappdragon.habitat.common.entity.ai.goal.RabbitAvoidEntityGoal;
 import mod.schnappdragon.habitat.common.registry.*;
 import mod.schnappdragon.habitat.core.HabitatConfig;
 import mod.schnappdragon.habitat.core.registry.HabitatItems;
@@ -694,9 +695,9 @@ public class PookaEntity extends RabbitEntity implements Monster, Shearable {
         }
     }
 
-    class PookaAvoidEntityGoal<T extends LivingEntity> extends FleeEntityGoal<T> {
+    class PookaAvoidEntityGoal<T extends LivingEntity> extends RabbitAvoidEntityGoal<T> {
         public PookaAvoidEntityGoal(Class<T> entity, float range, double v1, double v2, Predicate<LivingEntity> predicate) {
-            super(PookaEntity.this, entity, range, v1, v2, predicate);
+            super(PookaEntity.this, entity, range, v1, v2);
         }
 
         @Override

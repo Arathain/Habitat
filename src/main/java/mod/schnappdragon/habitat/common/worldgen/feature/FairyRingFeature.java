@@ -1,9 +1,9 @@
-package mod.schnappdragon.habitat.common.levelgen.feature;
+package mod.schnappdragon.habitat.common.worldgen.feature;
 
 import com.mojang.serialization.Codec;
 import mod.schnappdragon.habitat.common.block.FairyRingMushroomBlock;
 import mod.schnappdragon.habitat.core.registry.HabitatBlocks;
-import mod.schnappdragon.habitat.core.registry.HabitatConfiguredFeatures;
+import mod.schnappdragon.habitat.common.registry.HabitatConfiguredFeatures;
 import net.minecraft.block.BlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.StructureWorldAccess;

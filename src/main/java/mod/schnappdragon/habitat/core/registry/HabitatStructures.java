@@ -2,10 +2,18 @@ package mod.schnappdragon.habitat.core.registry;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import mod.schnappdragon.habitat.common.levelgen.feature.structure.FairyRingStructure;
 import mod.schnappdragon.habitat.Habitat;
+import mod.schnappdragon.habitat.common.worldgen.feature.structure.FairyRingStructure;
 import mod.schnappdragon.habitat.HabitatConfig;
+import mod.schnappdragon.habitat.core.HabitatConfig;
 import net.minecraft.data.BuiltinRegistries;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.BuiltinRegistries;
+import net.minecraft.util.registry.Registry;
+import net.minecraft.world.gen.chunk.StructureConfig;
+import net.minecraft.world.gen.chunk.StructuresConfig;
+import net.minecraft.world.gen.feature.StructureFeature;
+import net.minecraft.world.gen.feature.StructurePoolFeatureConfig;
 import net.minecraft.world.level.levelgen.StructureSettings;
 import net.minecraft.world.level.levelgen.feature.StructureFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.JigsawConfiguration;
@@ -15,27 +23,34 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class HabitatStructures {
-    public static final DeferredRegister<StructureFeature<?>> STRUCTURE_FEATURES = DeferredRegister.create(ForgeRegistries.STRUCTURE_FEATURES, Habitat.MOD_ID);
+    private static final Map<StructureFeature<?>, Identifier> STRUCTURE_FEATURES = new LinkedHashMap<>();
 
-    public static final RegistryObject<StructureFeature<JigsawConfiguration>> FAIRY_RING = STRUCTURE_FEATURES.register("fairy_ring", () -> (new FairyRingStructure(JigsawConfiguration.CODEC)));
+    public static final StructureFeature<StructurePoolFeatureConfig> FAIRY_RING = register("fairy_ring", () -> (new FairyRingStructure(StructurePoolFeatureConfig.CODEC)));
 
     public static void setupStructures() {
-        setupMapSpacingAndLand(FAIRY_RING.get(), new StructureFeatureConfiguration(HabitatConfig.COMMON.fairyRingAverage.get(), HabitatConfig.COMMON.fairyRingMinimum.get(), 1002806115), false);
+        setupMapSpacingAndLand(FAIRY_RING, new StructureConfig(HabitatConfig.COMMON.fairyRingAverage, HabitatConfig.COMMON.fairyRingMinimum, 1002806115), false);
+    }
+    private static void register(String name, StructureFeature<?> structureFeature) {
+        STRUCTURE_FEATURES.put(structureFeature, new Identifier(Habitat.MOD_ID, name));
+    }
+    public static void initialize() {
+        STRUCTURE_FEATURES.keySet().forEach(entityType -> Registry.register(Registry.STRUCTURE_FEATURE, STRUCTURE_FEATURES.get(entityType), entityType));
     }
 
-    private static <F extends StructureFeature<?>> void setupMapSpacingAndLand(F structure, StructureFeatureConfiguration structureFeatureConfiguration, boolean transformSurroundingLand) {
-        StructureFeature.STRUCTURES_REGISTRY.put(structure.getRegistryName().toString(), structure);
+    private static <F extends StructureFeature<?>> void setupMapSpacingAndLand(F structure, StructureConfig structureFeatureConfiguration, boolean transformSurroundingLand) {
+        StructureFeature.STRUCTURES.put(structure.getName(), structure);
 
         if (transformSurroundingLand)
-            StructureFeature.NOISE_AFFECTING_FEATURES = ImmutableList.<StructureFeature<?>>builder().addAll(StructureFeature.NOISE_AFFECTING_FEATURES).add(structure).build();
+            StructureFeature.LAND_MODIFYING_STRUCTURES.add(structure);
 
-        StructureSettings.DEFAULTS = ImmutableMap.<StructureFeature<?>, StructureFeatureConfiguration>builder().putAll(StructureSettings.DEFAULTS).put(structure, structureFeatureConfiguration).build();
+        StructuresConfig.DEFAULT_STRUCTURES.put(structure, structureFeatureConfiguration);
 
         BuiltinRegistries.NOISE_GENERATOR_SETTINGS.entrySet().forEach(settings -> {
-            Map<StructureFeature<?>, StructureFeatureConfiguration> structureMap = settings.getValue().structureSettings().structureConfig;
+            Map<StructureFeature<?>, StructureConfig> structureMap = settings.getValue().structureSettings().structureConfig;
 
             if (structureMap instanceof ImmutableMap) {
                 Map<StructureFeature<?>, StructureFeatureConfiguration> tempMap = new HashMap<>(structureMap);
@@ -45,4 +60,5 @@ public class HabitatStructures {
                 structureMap.put(structure, structureFeatureConfiguration);
         });
     }
+
 }

@@ -1,5 +1,6 @@
 package mod.schnappdragon.habitat.client.particle;
 
+import mod.schnappdragon.habitat.HabitatClient;
 import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
 import net.minecraft.client.particle.BlockLeakParticle;
@@ -13,12 +14,12 @@ import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleEffect;
 import net.minecraft.sound.SoundCategory;
 
-public class FallingSlimeParticle extends BlockLeakParticle.Falling {
+public class FallingSlimeParticle extends BlockLeakParticle.ContinuousFalling {
     private FallingSlimeParticle(ClientWorld world, double x, double y, double z, Fluid fluid, ParticleEffect particleData) {
         super(world, x, y, z, fluid, particleData);
     }
 
-    protected void postMoveUpdate() {
+    protected void updateVelocity() {
         if (this.onGround) {
             this.markDead();
             this.world.addParticle(this.nextParticle, this.x, this.y, this.z, 0.0D, 0.0D, 0.0D);

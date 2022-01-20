@@ -1,38 +1,38 @@
 package mod.schnappdragon.habitat.common.item;
 
-import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruit;
-import mod.schnappdragon.habitat.core.registry.HabitatItems;
+import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruitEntity;
 import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
-import net.minecraft.world.InteractionResultHolder;
-import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
+import mod.schnappdragon.habitat.core.registry.HabitatItems;
+import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.sound.SoundCategory;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.Hand;
+import net.minecraft.util.TypedActionResult;
+import net.minecraft.world.World;
 
 public class KabloomFruitItem extends Item {
-    public KabloomFruitItem(Item.Properties builder) {
+    public KabloomFruitItem(Item.Settings builder) {
         super(builder);
     }
 
-    public InteractionResultHolder<ItemStack> use(Level worldIn, Player playerIn, InteractionHand handIn) {
-        ItemStack itemstack = playerIn.getItemInHand(handIn);
-        worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), HabitatSoundEvents.KABLOOM_FRUIT_THROW.get(), SoundSource.NEUTRAL, 0.5F, 0.4F / (playerIn.getRandom().nextFloat() * 0.4F + 0.8F));
-        playerIn.getCooldowns().addCooldown(this, 20);
+    public TypedActionResult<ItemStack> use(World worldIn, PlayerEntity playerIn, Hand handIn) {
+        ItemStack itemstack = playerIn.getStackInHand(handIn);
+        worldIn.playSound(null, playerIn.getX(), playerIn.getY(), playerIn.getZ(), HabitatSoundEvents.KABLOOM_FRUIT_THROW, SoundCategory.NEUTRAL, 0.5F, 0.4F / (playerIn.getRandom().nextFloat() * 0.4F + 0.8F));
+        playerIn.getItemCooldownManager().set(this, 20);
 
-        if (!playerIn.getAbilities().instabuild) {
-            itemstack.shrink(1);
+        if (!playerIn.getAbilities().creativeMode) {
+            itemstack.decrement(1);
         }
 
-        if (!worldIn.isClientSide) {
-            ThrownKabloomFruit kabloomfruitentity = new ThrownKabloomFruit(worldIn, playerIn);
-            kabloomfruitentity.setItem(new ItemStack(HabitatItems.KABLOOM_FRUIT.get()));
-            kabloomfruitentity.shootFromRotation(playerIn, playerIn.getXRot(), playerIn.getYRot(), 0.0F, 0.5F, 0.9F);
-            worldIn.addFreshEntity(kabloomfruitentity);
+        if (!worldIn.isClient) {
+            ThrownKabloomFruitEntity kabloomfruitentity = new ThrownKabloomFruitEntity(worldIn, playerIn);
+            kabloomfruitentity.setItem(new ItemStack(HabitatItems.KABLOOM_FRUIT));
+            kabloomfruitentity.setVelocity(playerIn, playerIn.getPitch(), playerIn.getYaw(), 0.0F, 0.5F, 0.9F);
+            worldIn.spawnEntity(kabloomfruitentity);
         }
 
-        return new InteractionResultHolder<>(InteractionResult.SUCCESS, itemstack);
+        return new TypedActionResult<>(ActionResult.SUCCESS, itemstack);
     }
 }

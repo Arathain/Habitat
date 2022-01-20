@@ -1,6 +1,6 @@
 package mod.schnappdragon.habitat.common.block;
 
-import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruit;
+import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruitEntity;
 import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -95,7 +95,7 @@ public class KabloomFruitPileBlock extends Block {
             worldIn.addParticle(ParticleTypes.EXPLOSION, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 1.0D, 0.0D, 0.0D);
 
             for (int i = 1; i <= 9; i++) {
-                ThrownKabloomFruit kabloom = new ThrownKabloomFruit(worldIn, pos.getX() + worldIn.random.nextFloat(), pos.getY() + worldIn.random.nextFloat(), pos.getZ() + worldIn.random.nextFloat());
+                ThrownKabloomFruitEntity kabloom = new ThrownKabloomFruitEntity(worldIn, pos.getX() + worldIn.random.nextFloat(), pos.getY() + worldIn.random.nextFloat(), pos.getZ() + worldIn.random.nextFloat());
                 if (setFire)
                     kabloom.setSecondsOnFire(8);
                 worldIn.addFreshEntity(kabloom);

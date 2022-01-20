@@ -1,10 +1,9 @@
 package mod.schnappdragon.habitat.client.particle;
 
-import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.particle.*;
 import net.minecraft.client.world.ClientWorld;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.particles.SimpleParticleType;
+import net.minecraft.particle.DefaultParticleType;
+import net.minecraft.util.math.BlockPos;
 
 public class FairyRingSporeParticle extends SpriteBillboardParticle {
     private final SpriteProvider SpriteProviderWithAge;
@@ -12,53 +11,53 @@ public class FairyRingSporeParticle extends SpriteBillboardParticle {
     private FairyRingSporeParticle(ClientWorld world, double x, double y, double z, double motionX, double motionY, double motionZ, SpriteProvider SpriteProviderWithAge) {
         super(world, x, y, z);
         this.SpriteProviderWithAge = SpriteProviderWithAge;
-        this.lifetime = (int) (60 + random.nextDouble() * 60);
-        this.gravity = 0.0001F;
-        this.friction = 0.99F;
+        this.maxAge = (int) (60 + random.nextDouble() * 60);
+        this.gravityStrength = 0.0001F;
+        this.velocityMultiplier = 0.99F;
         float f = 0.9F + this.random.nextFloat() * 0.1F;
-        this.rCol = f;
-        this.gCol = f * 0.98F;
-        this.bCol = f * 0.98F;
-        this.quadSize *= 0.8F;
-        this.xd = motionX;
-        this.yd = motionY;
-        this.zd = motionZ;
-        this.setSpriteFromAge(SpriteProviderWithAge);
+        this.colorRed = f;
+        this.colorGreen = f * 0.98F;
+        this.colorBlue = f * 0.98F;
+        this.scale *= 0.8F;
+        this.velocityX = motionX;
+        this.velocityY = motionY;
+        this.velocityZ = motionZ;
+        this.setSpriteForAge(SpriteProviderWithAge);
     }
 
     public void tick() {
-        this.xo = this.x;
-        this.yo = this.y;
-        this.zo = this.z;
-        if (this.age++ >= this.lifetime || this.onGround || this.level.isFluidAtPosition(new BlockPos(this.x, this.y, this.z), (fluidState) -> !fluidState.isEmpty()))
-            this.remove();
+        this.prevPosX = this.x;
+        this.prevPosY = this.y;
+        this.prevPosZ = this.z;
+        if (this.age++ >= this.maxAge || this.onGround || this.world.testFluidState(new BlockPos(this.x, this.y, this.z), (fluidState) -> !fluidState.isEmpty()))
+            this.markDead();
         else {
-            this.yd -= this.gravity;
-            this.move(this.xd, this.yd, this.zd);
-            this.setSpriteFromAge(this.SpriteProviderWithAge);
+            this.velocityY -= this.gravityStrength;
+            this.move(this.velocityX, this.velocityY, this.velocityZ);
+            this.setSpriteForAge(this.SpriteProviderWithAge);
 
-            this.xd *= this.friction;
-            this.yd *= this.friction;
-            this.zd *= this.friction;
+            this.velocityX *= this.velocityMultiplier;
+            this.velocityY *= this.velocityMultiplier;
+            this.velocityZ *= this.velocityMultiplier;
         }
     }
 
-    public ParticleRenderType getRenderType() {
-        return ParticleRenderType.PARTICLE_SHEET_LIT;
+    public ParticleTextureSheet getType() {
+        return ParticleTextureSheet.PARTICLE_SHEET_LIT;
     }
 
-    public int getLightColor(float partialTick) {
+    public int getBrightness(float partialTick) {
         return 240;
     }
 
-    public static class Provider implements ParticleProvider<SimpleParticleType> {
+    public static class Factory implements ParticleFactory<DefaultParticleType> {
         private final SpriteProvider SpriteProvider;
 
-        public Provider(SpriteProvider SpriteProvider) {
+        public Factory(SpriteProvider SpriteProvider) {
             this.SpriteProvider = SpriteProvider;
         }
 
-        public Particle createParticle(SimpleParticleType typeIn, ClientLevel worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
+        public Particle createParticle(DefaultParticleType typeIn, ClientWorld worldIn, double x, double y, double z, double xSpeed, double ySpeed, double zSpeed) {
             return new FairyRingSporeParticle(worldIn, x, y, z, xSpeed, ySpeed, zSpeed, this.SpriteProvider);
         }
     }

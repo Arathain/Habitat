@@ -1,7 +1,7 @@
-package mod.schnappdragon.habitat.common.levelgen.placement;
+package mod.schnappdragon.habitat.common.worldgen.placement;
 
 import com.mojang.serialization.Codec;
-import mod.schnappdragon.habitat.core.registry.HabitatPlacementModifierTypes;
+import mod.schnappdragon.habitat.common.registry.HabitatPlacementModifierTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.gen.decorator.AbstractConditionalPlacementModifier;
 import net.minecraft.world.gen.decorator.DecoratorContext;

@@ -1,7 +1,8 @@
 package mod.schnappdragon.habitat.core.registry;
 
-import mod.schnappdragon.habitat.common.levelgen.placement.SlimeChunkFilter;
+import mod.schnappdragon.habitat.common.worldgen.placement.SlimeChunkFilter;
 import mod.schnappdragon.habitat.Habitat;
+import mod.schnappdragon.habitat.common.registry.HabitatConfiguredFeatures;
 import net.minecraft.core.Registry;
 import net.minecraft.data.BuiltinRegistries;
 import net.minecraft.data.worldgen.placement.PlacementUtils;

@@ -2,7 +2,7 @@ package mod.schnappdragon.habitat.core.misc;
 
 import mod.schnappdragon.habitat.common.entity.animal.PasserineEntity;
 import mod.schnappdragon.habitat.common.entity.monster.PookaEntity;
-import mod.schnappdragon.habitat.common.levelgen.feature.structure.FairyRingStructure;
+import mod.schnappdragon.habitat.common.worldgen.feature.structure.FairyRingStructure;
 import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
 import mod.schnappdragon.habitat.core.registry.HabitatStructures;

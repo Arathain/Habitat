@@ -2,7 +2,7 @@ package mod.schnappdragon.habitat.common.entity.animal;
 
 import mod.schnappdragon.habitat.common.registry.HabitatBlockTags;
 import mod.schnappdragon.habitat.common.registry.HabitatCriterionTriggers;
-import mod.schnappdragon.habitat.core.misc.HabitatDamageSources;
+import mod.schnappdragon.habitat.common.registry.HabitatDamageSources;
 import mod.schnappdragon.habitat.client.particle.ColorableParticleEffect;
 import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
 import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;

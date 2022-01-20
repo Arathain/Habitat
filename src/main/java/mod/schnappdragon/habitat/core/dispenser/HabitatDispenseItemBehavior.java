@@ -6,7 +6,7 @@ import mod.schnappdragon.habitat.common.block.KabloomBushBlock;
 import mod.schnappdragon.habitat.common.block.RafflesiaBlock;
 import mod.schnappdragon.habitat.common.block.entity.RafflesiaBlockEntity;
 import mod.schnappdragon.habitat.common.entity.monster.PookaEntity;
-import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruit;
+import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruitEntity;
 import mod.schnappdragon.habitat.common.entity.vehicle.HabitatBoat;
 import mod.schnappdragon.habitat.core.registry.HabitatBlocks;
 import mod.schnappdragon.habitat.core.registry.HabitatItems;
@@ -170,7 +170,7 @@ public class HabitatDispenseItemBehavior {
 
         DispenserBlock.registerBehavior(HabitatItems.KABLOOM_FRUIT.get(), new AbstractProjectileDispenseBehavior() {
             protected Projectile getProjectile(Level worldIn, Position position, ItemStack stackIn) {
-                return Util.make(new ThrownKabloomFruit(worldIn, position.x(), position.y(), position.z()), (kabloomfruit) -> {
+                return Util.make(new ThrownKabloomFruitEntity(worldIn, position.x(), position.y(), position.z()), (kabloomfruit) -> {
                     kabloomfruit.setItem(stackIn);
                 });
             }

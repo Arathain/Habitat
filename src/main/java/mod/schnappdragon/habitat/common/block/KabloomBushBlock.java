@@ -1,6 +1,6 @@
 package mod.schnappdragon.habitat.common.block;
 
-import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruit;
+import mod.schnappdragon.habitat.common.entity.projectile.ThrownKabloomFruitEntity;
 import mod.schnappdragon.habitat.core.registry.HabitatItems;
 import mod.schnappdragon.habitat.common.registry.HabitatSoundEvents;
 import net.minecraft.core.BlockPos;
@@ -114,7 +114,7 @@ public class KabloomBushBlock extends BushBlock implements BonemealableBlock {
                 worldIn.playSound(null, pos, HabitatSoundEvents.KABLOOM_BUSH_RUSTLE.get(), SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
             }
 
-            ThrownKabloomFruit kabloom = new ThrownKabloomFruit(worldIn, pos.getX() + 0.5F, pos.getY() + 0.6F, pos.getZ() + 0.5F);
+            ThrownKabloomFruitEntity kabloom = new ThrownKabloomFruitEntity(worldIn, pos.getX() + 0.5F, pos.getY() + 0.6F, pos.getZ() + 0.5F);
             if (setFire)
                 kabloom.setSecondsOnFire(8);
             worldIn.addFreshEntity(kabloom);

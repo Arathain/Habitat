@@ -1,9 +1,9 @@
-package mod.schnappdragon.habitat.core.registry;
+package mod.schnappdragon.habitat.common.registry;
 
 import mod.schnappdragon.habitat.Habitat;
-import mod.schnappdragon.habitat.common.levelgen.feature.FairyRingFeature;
-import mod.schnappdragon.habitat.common.levelgen.feature.HugeFairyRingMushroomFeature;
-import mod.schnappdragon.habitat.common.levelgen.feature.SlimeFernFeature;
+import mod.schnappdragon.habitat.common.worldgen.feature.FairyRingFeature;
+import mod.schnappdragon.habitat.common.worldgen.feature.HugeFairyRingMushroomFeature;
+import mod.schnappdragon.habitat.common.worldgen.feature.SlimeFernFeature;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.Registry;
 import net.minecraft.world.gen.feature.DefaultFeatureConfig;

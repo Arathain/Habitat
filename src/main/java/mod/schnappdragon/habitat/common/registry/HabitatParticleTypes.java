@@ -1,7 +1,8 @@
 package mod.schnappdragon.habitat.common.registry;
 
 import com.mojang.serialization.Codec;
-import mod.schnappdragon.habitat.client.particle.ColorableParticleEffect;
+import mod.schnappdragon.habitat.client.particle.*;
+import net.fabricmc.fabric.api.client.particle.v1.ParticleFactoryRegistry;
 import net.fabricmc.fabric.api.particle.v1.FabricParticleTypes;
 import net.minecraft.particle.DefaultParticleType;
 import net.minecraft.particle.ParticleType;
@@ -31,6 +32,11 @@ public class HabitatParticleTypes {
                 return ColorableParticleEffect.codec(NOTE);
             }
         });
+        ParticleFactoryRegistry.getInstance().register(FALLING_SLIME, FallingSlimeParticle.FallingSlimeFactory::new);
+        ParticleFactoryRegistry.getInstance().register(LANDING_SLIME, LandingSlimeParticle.LandingSlimeFactory::new);
+        ParticleFactoryRegistry.getInstance().register(FAIRY_RING_SPORE, FairyRingSporeParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(FEATHER, FeatherParticle.Factory::new);
+        ParticleFactoryRegistry.getInstance().register(NOTE, NoteParticle.Factory::new);
     }
 
 

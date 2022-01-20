@@ -1,4 +1,4 @@
-package mod.schnappdragon.habitat.common.levelgen.feature.structure;
+package mod.schnappdragon.habitat.common.worldgen.feature.structure;
 
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;

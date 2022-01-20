@@ -9,6 +9,7 @@
     "EntityModelLayersInvoker",
     "EntityTypeTagsInvoker",
     "ItemTagsInvoker",
+    "MooshroomEntityAccessor",
     "NoBigMushroomsInStructuresMixin",
     "NoLakesInStructuresMixin",
     "NoTreesInStructuresMixin"

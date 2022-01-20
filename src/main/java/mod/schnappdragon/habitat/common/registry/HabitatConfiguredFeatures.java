@@ -1,7 +1,8 @@
-package mod.schnappdragon.habitat.core.registry;
+package mod.schnappdragon.habitat.common.registry;
 
 import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.common.block.KabloomBushBlock;
+import mod.schnappdragon.habitat.core.registry.HabitatBlocks;
 import net.minecraft.block.BlockState;
 import net.minecraft.block.Blocks;
 import net.minecraft.block.MushroomBlock;

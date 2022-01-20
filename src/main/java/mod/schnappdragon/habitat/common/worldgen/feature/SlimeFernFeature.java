@@ -1,4 +1,4 @@
-package mod.schnappdragon.habitat.common.levelgen.feature;
+package mod.schnappdragon.habitat.common.worldgen.feature;
 
 import com.mojang.serialization.Codec;
 import mod.schnappdragon.habitat.common.block.SlimeFernBlock;
