@@ -2,7 +2,10 @@ package mod.schnappdragon.habitat.core.registry;
 
 import mod.schnappdragon.habitat.common.block.*;
 import mod.schnappdragon.habitat.Habitat;
+import net.minecraft.block.Block;
 import net.minecraft.core.Direction;
+import net.minecraft.item.Item;
+import net.minecraft.util.Identifier;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.material.Material;
@@ -11,8 +14,12 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 public class HabitatBlocks {
-    public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, Habitat.MOD_ID);
+    private static final Map<Block, Identifier> BLOCKS = new LinkedHashMap<>();
+    private static final Map<Item, Identifier> ITEMS = new LinkedHashMap<>();
 
     public static final RegistryObject<Block> RAFFLESIA = BLOCKS.register("rafflesia", () -> new RafflesiaBlock(BlockBehaviour.Properties.of(Material.PLANT, MaterialColor.COLOR_RED).instabreak().randomTicks().sound(SoundType.GRASS).noCollission().noOcclusion()));
     public static final RegistryObject<Block> POTTED_RAFFLESIA = BLOCKS.register("potted_rafflesia", () -> new FlowerPotBlock(RAFFLESIA.get(), BlockBehaviour.Properties.copy(Blocks.FLOWER_POT)));
@@ -64,7 +71,7 @@ public class HabitatBlocks {
     public static final RegistryObject<Block> FAIRY_RING_MUSHROOM_HYPHAE = BLOCKS.register("fairy_ring_mushroom_hyphae", () -> new LogBlock(STRIPPED_FAIRY_RING_MUSHROOM_HYPHAE, BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.QUARTZ).strength(2.0F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> FAIRY_RING_MUSHROOM_PLANKS = BLOCKS.register("fairy_ring_mushroom_planks", () -> new Block(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_YELLOW).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> FAIRY_RING_MUSHROOM_SLAB = BLOCKS.register("fairy_ring_mushroom_slab", () -> new SlabBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_YELLOW).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
-    public static final RegistryObject<Block> FAIRY_RING_MUSHROOM_STAIRS = BLOCKS.register("fairy_ring_mushroom_stairs", () -> new StairBlock(FAIRY_RING_MUSHROOM_PLANKS.get().defaultBlockState(), BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_YELLOW).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
+    public static final RegistryObject<Block> FAIRY_RING_MUSHROOM_STAIRS = BLOCKS.register("fairy_ring_mushroom_stairs", () -> new StairBlock(FAIRY_RING_MUSHROOM_PLANKS.get().getDefaultState(), BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_YELLOW).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> FAIRY_RING_MUSHROOM_PRESSURE_PLATE = BLOCKS.register("fairy_ring_mushroom_pressure_plate", () -> new PressurePlateBlock(PressurePlateBlock.Sensitivity.EVERYTHING, BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_YELLOW).noCollission().strength(0.5F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> FAIRY_RING_MUSHROOM_FENCE = BLOCKS.register("fairy_ring_mushroom_fence", () -> new FenceBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_YELLOW).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
     public static final RegistryObject<Block> FAIRY_RING_MUSHROOM_FENCE_GATE = BLOCKS.register("fairy_ring_mushroom_fence_gate", () -> new FenceGateBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_YELLOW).strength(2.0F, 3.0F).sound(SoundType.WOOD)));
@@ -83,4 +90,13 @@ public class HabitatBlocks {
     public static final RegistryObject<Block> FAIRY_RING_MUSHROOM_TRAPPED_CHEST = BLOCKS.register("fairy_ring_mushroom_trapped_chest", () -> new HabitatTrappedChestBlock(ChestVariant.FAIY_RING_MUSHROOM_TRAPPED, BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_YELLOW).strength(2.5F).sound(SoundType.WOOD)));
 
     public static final RegistryObject<Block> FAIRY_RING_MUSHROOM_BEEHIVE = BLOCKS.register("fairy_ring_mushroom_beehive", () -> new HabitatBeehiveBlock(BlockBehaviour.Properties.of(Material.WOOD, MaterialColor.COLOR_YELLOW).strength(0.3F).sound(SoundType.WOOD)));
+
+    private static <T extends Block> T create(String name, T block, boolean createItem) {
+        BLOCKS.put(block, new Identifier(Habitat.MOD_ID, name));
+        if (createItem) {
+            ITEMS.put(new BlockItem(block, new Item.Settings().group(Habitat.GROUP)), BLOCKS.get(block));
+        }
+        return block;
+    }
+
 }

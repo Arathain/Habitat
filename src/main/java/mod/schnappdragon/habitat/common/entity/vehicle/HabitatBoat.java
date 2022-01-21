@@ -1,7 +1,6 @@
 package mod.schnappdragon.habitat.common.entity.vehicle;
 
 import mod.schnappdragon.habitat.Habitat;
-import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.entity.vehicle.BoatEntity;
 import net.minecraft.nbt.CompoundTag;
@@ -35,7 +34,7 @@ public class HabitatBoat extends BoatEntity {
     public HabitatBoat(Level worldIn, double x, double y, double z) {
         this(HabitatEntityTypes.BOAT.get(), worldIn);
         this.setPos(x, y, z);
-        this.setDeltaMovement(Vec3d.ZERO);
+        this.setVelocity(Vec3d.ZERO);
         this.xo = x;
         this.yo = y;
         this.zo = z;
@@ -73,7 +72,7 @@ public class HabitatBoat extends BoatEntity {
 
     @Override
     protected void checkFallDamage(double y, boolean onGroundIn, BlockState state, BlockPos pos) {
-        this.lastYd = this.getDeltaMovement().y;
+        this.lastYd = this.getVelocity().y;
         if (!this.isPassenger()) {
             if (onGroundIn) {
                 if (this.fallDistance > 3.0F) {

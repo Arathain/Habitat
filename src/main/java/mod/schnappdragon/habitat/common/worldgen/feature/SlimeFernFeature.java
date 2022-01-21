@@ -38,11 +38,11 @@ public class SlimeFernFeature extends Feature<DefaultFeatureConfig> {
                     if (world.getBlockState(blockpos$mutable.offset(dir)).isIn(BlockTags.BASE_STONE_OVERWORLD)) {
                         BlockState state;
                         if (dir == Direction.DOWN)
-                            state = HabitatBlocks.SLIME_FERN.defaultBlockState();
+                            state = HabitatBlocks.SLIME_FERN.getDefaultState();
                         else if (dir == Direction.UP)
-                            state = HabitatBlocks.SLIME_FERN.defaultBlockState().setValue(SlimeFernBlock.ON_CEILING, true);
+                            state = HabitatBlocks.SLIME_FERN.getDefaultState().setValue(SlimeFernBlock.ON_CEILING, true);
                         else
-                            state = HabitatBlocks.WALL_SLIME_FERN.defaultBlockState().setValue(WallSlimeFernBlock.HORIZONTAL_FACING, dir.getOpposite());
+                            state = HabitatBlocks.WALL_SLIME_FERN.getDefaultState().setValue(WallSlimeFernBlock.HORIZONTAL_FACING, dir.getOpposite());
 
                         this.setBlockState(world, blockpos$mutable, state);
 

@@ -1,11 +1,14 @@
 package mod.schnappdragon.habitat.common.item;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.item.BlockItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.BlockPlaceContext;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.WorldView;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.shapes.CollisionContext;
@@ -25,7 +28,7 @@ public class WallOrBaseItem extends BlockItem {
     protected BlockState getPlacementState(BlockPlaceContext context) {
         BlockState state = this.wallBlock.getStateForPlacement(context);
         BlockState state1 = null;
-        LevelReader world = context.getLevel();
+        WorldView world = context.getLevel();
         BlockPos pos = context.getClickedPos();
 
         for (Direction dir : context.getNearestLookingDirections()) {

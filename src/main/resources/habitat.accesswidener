@@ -4,3 +4,5 @@ extendable    class    net/minecraft/client/particle/BlockLeakParticle$Landing
 extendable    class    net/minecraft/client/particle/BlockLeakParticle$ContinuousFalling
 accessible    method   net/minecraft/client/particle/BlockLeakParticle$ContinuousFalling <init> (Lnet/minecraft/client/world/ClientWorld;DDDLnet/minecraft/fluid/Fluid;Lnet/minecraft/particle/ParticleEffect;)V
 accessible    method   net/minecraft/client/particle/BlockLeakParticle$Landing <init> (Lnet/minecraft/client/world/ClientWorld;DDDLnet/minecraft/fluid/Fluid;)V
+accessible    field    net/minecraft/entity/passive/RabbitEntity lastOnGround Z
+accessible    field    net/minecraft/entity/passive/RabbitEntity ticksUntilJump I

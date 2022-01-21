@@ -3,7 +3,17 @@ package mod.schnappdragon.habitat.common.item.crafting;
 import mod.schnappdragon.habitat.common.item.FairyRingMushroomItem;
 import mod.schnappdragon.habitat.core.registry.HabitatItems;
 import mod.schnappdragon.habitat.core.registry.HabitatRecipeSerializers;
+import net.minecraft.block.Blocks;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.inventory.CraftingInventory;
+import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
+import net.minecraft.item.SuspiciousStewItem;
+import net.minecraft.recipe.RecipeSerializer;
+import net.minecraft.recipe.SpecialCraftingRecipe;
 import net.minecraft.resources.Identifier;
+import net.minecraft.util.Identifier;
+import net.minecraft.world.World;
 import net.minecraft.world.effect.StatusEffect;
 import net.minecraft.world.inventory.CraftingContainer;
 import net.minecraft.world.item.ItemStack;
@@ -15,26 +25,26 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import org.apache.commons.lang3.tuple.Pair;
 
-public class FairyRingMushroomSuspiciousStewRecipe extends CustomRecipe {
+public class FairyRingMushroomSuspiciousStewRecipe extends SpecialCraftingRecipe {
     public FairyRingMushroomSuspiciousStewRecipe(Identifier idIn) {
         super(idIn);
     }
 
     @Override
-    public boolean matches(CraftingContainer inv, Level worldIn) {
+    public boolean matches(CraftingInventory inv, World world) {
         boolean brown = false;
         boolean red = false;
         boolean fairy = false;
         boolean bowl = false;
 
-        for (int i = 0; i < inv.getContainerSize(); ++i) {
-            ItemStack itemstack = inv.getItem(i);
+        for (int i = 0; i < inv.size(); ++i) {
+            ItemStack itemstack = inv.getStack(i);
             if (!itemstack.isEmpty()) {
                 if (itemstack.getItem() == Blocks.BROWN_MUSHROOM.asItem() && !brown)
                     brown = true;
                 else if (itemstack.getItem() == Blocks.RED_MUSHROOM.asItem() && !red)
                     red = true;
-                else if (itemstack.getItem() == HabitatItems.FAIRY_RING_MUSHROOM.get() && !fairy)
+                else if (itemstack.getItem() == HabitatItems.FAIRY_RING_MUSHROOM && !fairy)
                     fairy = true;
                 else if (itemstack.getItem() == Items.BOWL && !bowl)
                     bowl = true;
@@ -47,21 +57,21 @@ public class FairyRingMushroomSuspiciousStewRecipe extends CustomRecipe {
     }
 
     @Override
-    public ItemStack assemble(CraftingContainer inv) {
+    public ItemStack craft(CraftingInventory inventory) {
         Pair<StatusEffect, Integer> effect = FairyRingMushroomItem.getStewEffect();
 
         ItemStack stew = new ItemStack(Items.SUSPICIOUS_STEW, 1);
-        SuspiciousStewItem.saveStatusEffect(stew, effect.getLeft(), effect.getRight());
+        SuspiciousStewItem.addEffectToStew(stew, effect.getLeft(), effect.getRight());
         return stew;
     }
 
     @Override
-    public boolean canCraftInDimensions(int width, int height) {
+    public boolean fits(int width, int height) {
         return width >= 2 && height >= 2;
     }
 
     @Override
     public RecipeSerializer<?> getSerializer() {
-        return HabitatRecipeSerializers.CRAFTING_SPECIAL_FAIRYRINGMUSHROOMSUSPICIOUSSTEW.get();
+        return HabitatRecipeSerializers.CRAFTING_SPECIAL_FAIRYRINGMUSHROOMSUSPICIOUSSTEW;
     }
 }

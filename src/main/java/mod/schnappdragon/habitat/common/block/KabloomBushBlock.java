@@ -9,7 +9,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ActionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -70,7 +70,7 @@ public class KabloomBushBlock extends BushBlock implements BonemealableBlock {
     }
 
     @Override
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public ActionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         if (state.getValue(AGE) == 7) {
             if (player.getItemInHand(handIn).canPerformAction(ToolActions.SHEARS_HARVEST)) {
                 popResource(worldIn, pos, new ItemStack(HabitatItems.KABLOOM_FRUIT.get(), 1));
@@ -82,7 +82,7 @@ public class KabloomBushBlock extends BushBlock implements BonemealableBlock {
                 worldIn.playSound(null, pos, HabitatSoundEvents.KABLOOM_BUSH_SHEAR.get(), SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
             } else
                 dropFruit(state, worldIn, pos, true, false);
-            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+            return ActionResult.sidedSuccess(worldIn.isClientSide);
         }
         return super.use(state, worldIn, pos, player, handIn, hit);
     }

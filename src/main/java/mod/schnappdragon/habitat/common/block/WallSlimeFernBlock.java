@@ -7,7 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.WorldView;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -48,7 +48,7 @@ public class WallSlimeFernBlock extends AbstractSlimeFernBlock {
      * Placement Methods
      */
 
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, WorldView worldIn, BlockPos pos) {
         Direction dir = state.getValue(HORIZONTAL_FACING);
         BlockPos pos1 = pos.relative(dir.getOpposite());
         BlockState state1 = worldIn.getBlockState(pos1);
@@ -57,7 +57,7 @@ public class WallSlimeFernBlock extends AbstractSlimeFernBlock {
 
     @Nullable
     public BlockState getStateForPlacement(BlockPlaceContext context) {
-        BlockState state = this.defaultBlockState();
+        BlockState state = this.getDefaultState();
 
         for (Direction dir : context.getNearestLookingDirections()) {
             if (dir.getAxis().isHorizontal()) {
@@ -71,6 +71,6 @@ public class WallSlimeFernBlock extends AbstractSlimeFernBlock {
     }
 
     public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-        return facing.getOpposite() == stateIn.getValue(HORIZONTAL_FACING) && !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : stateIn;
+        return facing.getOpposite() == stateIn.getValue(HORIZONTAL_FACING) && !stateIn.canSurvive(worldIn, currentPos) ? Blocks.AIR.getDefaultState() : stateIn;
     }
 }

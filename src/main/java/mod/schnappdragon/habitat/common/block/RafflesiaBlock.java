@@ -14,7 +14,7 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.InteractionResult;
+import net.minecraft.world.ActionResult;
 import net.minecraft.world.effect.StatusEffect;
 import net.minecraft.world.effect.StatusEffectInstance;
 import net.minecraft.world.entity.AreaEffectCloud;
@@ -30,7 +30,7 @@ import net.minecraft.world.item.SuspiciousStewItem;
 import net.minecraft.world.item.alchemy.PotionUtils;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.WorldView;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.BushBlock;
@@ -82,7 +82,7 @@ public class RafflesiaBlock extends BushBlock implements IForgeBlock, Bonemealab
      * Position Validity Method
      */
 
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, WorldView worldIn, BlockPos pos) {
         return worldIn.getBlockState(pos.below()).is(HabitatBlockTags.RAFFLESIA_PLANTABLE_ON);
     }
 
@@ -168,7 +168,7 @@ public class RafflesiaBlock extends BushBlock implements IForgeBlock, Bonemealab
 
     @Override
     @SuppressWarnings("ConstantConditions")
-    public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
+    public ActionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit) {
         ItemStack stack = player.getItemInHand(handIn);
 
         if (stack.getItem() == Items.SUSPICIOUS_STEW && !state.getValue(HAS_STEW)) {
@@ -183,7 +183,7 @@ public class RafflesiaBlock extends BushBlock implements IForgeBlock, Bonemealab
                 ((ServerLevel) worldIn).sendParticles(getParticle(rafflesia.Effects), pos.getX() + 0.5D + (2 * worldIn.random.nextDouble() - 1.0F) / 3.0D, pos.getY() + 0.25F + worldIn.random.nextDouble() / 2, pos.getZ() + 0.5D + (2 * worldIn.random.nextDouble() - 1.0F) / 3.0D, 0, 0.0D, 0.1D, 0.0D, 1.0D);
             }
             worldIn.gameEvent(player, GameEvent.FLUID_PLACE, pos);
-            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+            return ActionResult.sidedSuccess(worldIn.isClientSide);
         } else if (stack.getItem() == Items.BOWL && state.getValue(HAS_STEW)) {
             if (!worldIn.isClientSide && worldIn.getBlockEntity(pos) instanceof RafflesiaBlockEntity rafflesia) {
                 ItemStack stew = new ItemStack(Items.SUSPICIOUS_STEW);
@@ -198,7 +198,7 @@ public class RafflesiaBlock extends BushBlock implements IForgeBlock, Bonemealab
                 worldIn.playSound(null, pos, HabitatSoundEvents.RAFFLESIA_FILL_BOWL.get(), SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
             }
             worldIn.gameEvent(player, GameEvent.FLUID_PICKUP, pos);
-            return InteractionResult.sidedSuccess(worldIn.isClientSide);
+            return ActionResult.sidedSuccess(worldIn.isClientSide);
         }
         return super.use(state, worldIn, pos, player, handIn, hit);
     }

@@ -28,11 +28,11 @@ public class HabitatConfiguredFeatures {
     public static final ConfiguredFeature<?, ?> PATCH_SLIME_FERN = HabitatFeatures.SLIME_FERN_FEATURE.configure(FeatureConfig.DEFAULT);
 
     public static final ConfiguredFeature<?, ?> PATCH_BALL_CACTUS = Feature.RANDOM_PATCH.configure(new RandomPatchFeatureConfig(4, 5, 1,
-            () -> Feature.SIMPLE_BLOCK.configure(new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(DataPool.<BlockState>builder().add(HabitatBlocks.FLOWERING_ORANGE_BALL_CACTUS.defaultBlockState(), 3).add(HabitatBlocks.FLOWERING_PINK_BALL_CACTUS.defaultBlockState(), 3).add(HabitatBlocks.FLOWERING_RED_BALL_CACTUS.defaultBlockState(), 2).add(HabitatBlocks.FLOWERING_YELLOW_BALL_CACTUS.defaultBlockState(), 1))))
+            () -> Feature.SIMPLE_BLOCK.configure(new SimpleBlockFeatureConfig(new WeightedBlockStateProvider(DataPool.<BlockState>builder().add(HabitatBlocks.FLOWERING_ORANGE_BALL_CACTUS.getDefaultState(), 3).add(HabitatBlocks.FLOWERING_PINK_BALL_CACTUS.getDefaultState(), 3).add(HabitatBlocks.FLOWERING_RED_BALL_CACTUS.getDefaultState(), 2).add(HabitatBlocks.FLOWERING_YELLOW_BALL_CACTUS.getDefaultState(), 1))))
                     .filtered(BlockPredicate.allOf(BlockPredicate.replaceable(), BlockPredicate.matchingBlocks(List.of(Blocks.SAND, Blocks.RED_SAND), new BlockPos(0, -1, 0))))));
 
     public static final ConfiguredFeature<?, ?> FAIRY_RING = HabitatFeatures.FAIRY_RING_FEATURE.configure(FeatureConfig.DEFAULT);
-    public static final ConfiguredFeature<?, ?> HUGE_FAIRY_RING_MUSHROOM = HabitatFeatures.HUGE_FAIRY_RING_MUSHROOM_FEATURE.configure(new HugeMushroomFeatureConfig(BlockStateProvider.of(HabitatBlocks.FAIRY_RING_MUSHROOM_BLOCK.defaultBlockState().with(MushroomBlock.DOWN, false)), BlockStateProvider.of(HabitatBlocks.FAIRY_RING_MUSHROOM_STEM.defaultBlockState().with(MushroomBlock.UP, false).setValue(MushroomBlock.DOWN, false)), 2));
+    public static final ConfiguredFeature<?, ?> HUGE_FAIRY_RING_MUSHROOM = HabitatFeatures.HUGE_FAIRY_RING_MUSHROOM_FEATURE.configure(new HugeMushroomFeatureConfig(BlockStateProvider.of(HabitatBlocks.FAIRY_RING_MUSHROOM_BLOCK.getDefaultState().with(MushroomBlock.DOWN, false)), BlockStateProvider.of(HabitatBlocks.FAIRY_RING_MUSHROOM_STEM.getDefaultState().with(MushroomBlock.UP, false).setValue(MushroomBlock.DOWN, false)), 2));
 
     public static void registerConfiguredFeatures() {
         register("rafflesia_patch", PATCH_RAFFLESIA);

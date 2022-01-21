@@ -1,8 +1,8 @@
 package mod.schnappdragon.habitat.common.block;
 
-import net.minecraft.world.effect.StatusEffect;
-import net.minecraft.world.effect.StatusEffects;
-import net.minecraft.world.level.block.FlowerBlock;
+import net.minecraft.block.FlowerBlock;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.entity.effect.StatusEffects;
 
 import java.util.function.Supplier;
 
@@ -10,19 +10,19 @@ public class HabitatFlowerBlock extends FlowerBlock {
     private final Supplier<StatusEffect> stewEffect;
     private final int stewEffectDuration;
 
-    public HabitatFlowerBlock(Supplier<StatusEffect> stewEffect, int stewEffectDuration, Properties properties) {
+    public HabitatFlowerBlock(Supplier<StatusEffect> stewEffect, int stewEffectDuration, Settings properties) {
         super(StatusEffects.REGENERATION, stewEffectDuration, properties);
         this.stewEffect = stewEffect;
         this.stewEffectDuration = stewEffectDuration;
     }
-
     @Override
-    public StatusEffect getSuspiciousStewEffect() {
+    public StatusEffect getEffectInStew() {
         return this.stewEffect.get();
     }
 
     @Override
-    public int getEffectDuration() {
-        return this.stewEffectDuration * (this.stewEffect.get().isInstantenous() ? 1 : 20);
+    public int getEffectInStewDuration() {
+        return this.stewEffectDuration * (this.stewEffect.get().isInstant() ? 1 : 20);
     }
+
 }

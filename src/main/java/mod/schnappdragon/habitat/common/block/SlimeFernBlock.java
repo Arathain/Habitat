@@ -6,7 +6,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.LevelAccessor;
-import net.minecraft.world.level.LevelReader;
+import net.minecraft.world.level.WorldView;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
@@ -44,17 +44,17 @@ public class SlimeFernBlock extends AbstractSlimeFernBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         for (Direction dir : context.getNearestLookingDirections()) {
             if (dir.getAxis() == Direction.Axis.Y) {
-                return this.defaultBlockState().setValue(ON_CEILING, (dir == Direction.UP));
+                return this.getDefaultState().setValue(ON_CEILING, (dir == Direction.UP));
             }
         }
         return null;
     }
 
     public BlockState updateShape(BlockState stateIn, Direction facing, BlockState facingState, LevelAccessor worldIn, BlockPos currentPos, BlockPos facingPos) {
-        return getBlockConnected(stateIn).getOpposite() == facing && !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.defaultBlockState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
+        return getBlockConnected(stateIn).getOpposite() == facing && !this.canSurvive(stateIn, worldIn, currentPos) ? Blocks.AIR.getDefaultState() : super.updateShape(stateIn, facing, facingState, worldIn, currentPos, facingPos);
     }
 
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
+    public boolean canSurvive(BlockState state, WorldView worldIn, BlockPos pos) {
         Direction dir = getBlockConnected(state).getOpposite();
         BlockState state1 = worldIn.getBlockState(pos.relative(dir));
         return state1.isFaceSturdy(worldIn, pos.relative(dir), dir.getOpposite()) || state1.is(Blocks.FARMLAND);

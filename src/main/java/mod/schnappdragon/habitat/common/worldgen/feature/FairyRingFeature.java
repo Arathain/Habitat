@@ -58,6 +58,6 @@ public class FairyRingFeature extends Feature<DefaultFeatureConfig> {
     }
 
     private BlockState getMushroom(Random random) {
-        return HabitatBlocks.FAIRY_RING_MUSHROOM.defaultBlockState().setValue(FairyRingMushroomBlock.MUSHROOMS, 1 + random.nextInt(4));
+        return HabitatBlocks.FAIRY_RING_MUSHROOM.getDefaultState().setValue(FairyRingMushroomBlock.MUSHROOMS, 1 + random.nextInt(4));
     }
 }

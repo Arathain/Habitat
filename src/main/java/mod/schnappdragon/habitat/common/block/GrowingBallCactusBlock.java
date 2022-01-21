@@ -59,7 +59,7 @@ public class GrowingBallCactusBlock extends AbstractBallCactusBlock implements B
 
     public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
         if (ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt(10) == 0)) {
-            worldIn.setBlockAndUpdate(pos, getColor().getBallCactus().defaultBlockState());
+            worldIn.setBlockAndUpdate(pos, getColor().getBallCactus().getDefaultState());
             ForgeHooks.onCropsGrowPost(worldIn, pos, state);
         }
     }
@@ -73,6 +73,6 @@ public class GrowingBallCactusBlock extends AbstractBallCactusBlock implements B
     }
 
     public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
-        worldIn.setBlockAndUpdate(pos, (rand.nextBoolean() ? getColor().getBallCactus() : getColor().getFloweringBallCactus()).defaultBlockState());
+        worldIn.setBlockAndUpdate(pos, (rand.nextBoolean() ? getColor().getBallCactus() : getColor().getFloweringBallCactus()).getDefaultState());
     }
 }

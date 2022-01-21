@@ -3,7 +3,6 @@ package mod.schnappdragon.habitat.common.worldgen.feature.structure;
 import com.google.common.collect.ImmutableList;
 import com.mojang.serialization.Codec;
 import mod.schnappdragon.habitat.Habitat;
-import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.Identifier;

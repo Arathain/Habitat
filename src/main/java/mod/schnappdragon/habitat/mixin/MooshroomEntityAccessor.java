@@ -10,7 +10,7 @@ public interface MooshroomEntityAccessor {
     @Accessor("stewEffect")
     StatusEffect getStewEffect();
 
-    @Accessor("stewEffectCooldown")
+    @Accessor("stewEffectDuration")
     public void setStewEffectCooldown(int stewEffectCooldown);
     @Accessor("stewEffect")
     public void setStewEffect(StatusEffect stewEffectCooldown);

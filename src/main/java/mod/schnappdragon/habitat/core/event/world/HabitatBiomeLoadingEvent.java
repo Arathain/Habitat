@@ -1,8 +1,7 @@
 package mod.schnappdragon.habitat.core.event.world;
 
 import mod.schnappdragon.habitat.Habitat;
-import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
-import mod.schnappdragon.habitat.core.registry.HabitatPlacedFeatures;
+import mod.schnappdragon.habitat.common.registry.HabitatPlacedFeatures;
 import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.world.entity.EntityType;

@@ -104,7 +104,7 @@ public class WoodPostBlock extends Block implements SimpleWaterloggedBlock {
     @Override
     public BlockState getToolModifiedState(BlockState state, Level world, BlockPos pos, Player player, ItemStack stack, ToolAction toolAction) {
         if (ToolActions.AXE_STRIP.equals(toolAction) && strippedBlock != null && strippedBlock.get() instanceof WoodPostBlock) {
-            BlockState newState = strippedBlock.get().defaultBlockState().setValue(WATERLOGGED, state.getValue(WATERLOGGED)).setValue(AXIS, state.getValue(AXIS));
+            BlockState newState = strippedBlock.get().getDefaultState().setValue(WATERLOGGED, state.getValue(WATERLOGGED)).setValue(AXIS, state.getValue(AXIS));
             for (BooleanProperty property : CHAINED) {
                 newState = newState.setValue(property, state.getValue(property));
             }
@@ -114,7 +114,7 @@ public class WoodPostBlock extends Block implements SimpleWaterloggedBlock {
     }
 
     private BlockState getRelevantState(Level world, BlockPos pos, Axis axis) {
-        BlockState state = this.defaultBlockState().setValue(WATERLOGGED, world.getFluidState(pos).getType() == Fluids.WATER).setValue(AXIS, axis);
+        BlockState state = this.getDefaultState().setValue(WATERLOGGED, world.getFluidState(pos).getType() == Fluids.WATER).setValue(AXIS, axis);
 
         for (Direction direction : Direction.values()) {
             if (direction.getAxis() == axis)

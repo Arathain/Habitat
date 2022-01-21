@@ -148,7 +148,7 @@ public class HabitatDispenseItemBehavior {
                     this.setSuccess(true);
                 } else if (state.getBlock() instanceof FloweringBallCactusBlock cactus) {
                     Block.popResource(worldIn, pos, new ItemStack(cactus.getColor().getFlower()));
-                    worldIn.setBlockAndUpdate(pos, cactus.getColor().getBallCactus().defaultBlockState());
+                    worldIn.setBlockAndUpdate(pos, cactus.getColor().getBallCactus().getDefaultState());
                     worldIn.playSound(null, pos, HabitatSoundEvents.FLOWERING_BALL_CACTUS_SHEAR.get(), SoundSource.BLOCKS, 1.0F, 0.8F + worldIn.random.nextFloat() * 0.4F);
                     if (stack.hurt(1, worldIn.getRandom(), null))
                         stack.setCount(0);

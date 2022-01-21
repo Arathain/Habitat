@@ -1,26 +1,23 @@
 package mod.schnappdragon.habitat.common.block;
 
-import net.minecraft.core.BlockPos;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.world.effect.StatusEffect;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
-import net.minecraftforge.common.ForgeHooks;
+import mod.schnappdragon.habitat.common.registry.HabitatBlockTags;
+import net.minecraft.block.*;
+import net.minecraft.entity.effect.StatusEffect;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.World;
+import net.minecraft.world.WorldView;
 
 import java.util.Random;
 import java.util.function.Supplier;
 
-public class BallCactusFlowerBlock extends HabitatFlowerBlock implements BonemealableBlock {
-    protected static final VoxelShape SHAPE = Block.box(5.0D, 0.0D, 5.0D, 11.0D, 3.0D, 11.0D);
+public class BallCactusFlowerBlock extends HabitatFlowerBlock implements Fertilizable {
+    protected static final VoxelShape SHAPE = Block.createCuboidShape(5.0D, 0.0D, 5.0D, 11.0D, 3.0D, 11.0D);
     private final BallCactusColor color;
 
-    public BallCactusFlowerBlock(BallCactusColor colorIn, Supplier<StatusEffect> stewEffect, int stewEffectDuration, Properties properties) {
+    public BallCactusFlowerBlock(BallCactusColor colorIn, Supplier<StatusEffect> stewEffect, int stewEffectDuration, AbstractBlock.Settings properties) {
         super(stewEffect, stewEffectDuration, properties);
         this.color = colorIn;
     }
@@ -30,7 +27,7 @@ public class BallCactusFlowerBlock extends HabitatFlowerBlock implements Bonemea
     }
 
     @Override
-    public VoxelShape getShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+    public VoxelShape getCollisionShape(BlockState state, BlockView worldIn, BlockPos pos, ShapeContext context) {
         return SHAPE;
     }
 
@@ -43,38 +40,37 @@ public class BallCactusFlowerBlock extends HabitatFlowerBlock implements Bonemea
      * Position Validity Method
      */
 
-    public boolean canSurvive(BlockState state, LevelReader worldIn, BlockPos pos) {
-        return worldIn.getBlockState(pos.below()).is(HabitatBlockTags.BALL_CACTUS_FLOWER_PLACEABLE_ON) || worldIn.getBlockState(pos.below()).is(HabitatBlockTags.BALL_CACTUS_PLANTABLE_ON);
+    public boolean canPlaceAt(BlockState state, WorldView worldIn, BlockPos pos) {
+        return worldIn.getBlockState(pos.down()).isIn(HabitatBlockTags.BALL_CACTUS_FLOWER_PLACEABLE_ON) || worldIn.getBlockState(pos.down()).isIn(HabitatBlockTags.BALL_CACTUS_PLANTABLE_ON);
     }
 
     /*
      * Growth Methods
      */
 
-    public boolean isRandomlyTicking(BlockState state) {
+    public boolean hasRandomTicks(BlockState state) {
         return true;
     }
 
-    public void randomTick(BlockState state, ServerLevel worldIn, BlockPos pos, Random random) {
-        if (canGrow(worldIn, pos) && ForgeHooks.onCropsGrowPre(worldIn, pos, state, random.nextInt(10) == 0)) {
-            worldIn.setBlockAndUpdate(pos, color.getGrowingBallCactus().defaultBlockState());
-            ForgeHooks.onCropsGrowPost(worldIn, pos, state);
+    public void randomTick(BlockState state, ServerWorld world, BlockPos pos, Random random) {
+        if (canGrow(world, pos)) {
+            world.setBlockState(pos, color.getGrowingBallCactus().getDefaultState());
         }
     }
 
-    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient) {
-        return canGrow((Level) worldIn, pos);
+    public boolean isFertilizable(BlockView world, BlockPos pos, BlockState var3, boolean var4) {
+        return canGrow((World) world, pos);
     }
 
-    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
-        return canGrow(worldIn, pos);
+    public boolean canGrow(World world, Random var2, BlockPos pos, BlockState var4) {
+        return canGrow(world, pos);
     }
 
-    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
-        worldIn.setBlockAndUpdate(pos, (rand.nextBoolean() ? color.getGrowingBallCactus() : color.getBallCactus()).defaultBlockState());
+    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState var4) {
+        world.setBlockState(pos, (random.nextBoolean() ? color.getGrowingBallCactus() : color.getBallCactus()).getDefaultState());
     }
 
-    public boolean canGrow(Level worldIn, BlockPos pos) {
-        return !worldIn.getBlockState(pos.below()).is(HabitatBlockTags.BALL_CACTUS_FLOWER_PLACEABLE_ON);
+    public boolean canGrow(World worldIn, BlockPos pos) {
+        return !worldIn.getBlockState(pos.down()).isIn(HabitatBlockTags.BALL_CACTUS_FLOWER_PLACEABLE_ON);
     }
 }

@@ -54,11 +54,11 @@ public class HugeFairyRingMushroomFeature extends HugeMushroomFeature {
 
     @Override
     protected void generateStem(WorldAccess world, Random rand, BlockPos pos, HugeMushroomFeatureConfig config, int i0, BlockPos.Mutable blockpos$mutable) {
-        WeightedBlockStateProvider mushroomProvider = new WeightedBlockStateProvider(DataPool.<BlockState>builder().add(HabitatBlocks.FAIRY_RING_MUSHROOM.defaultBlockState(), 1).add(HabitatBlocks.FAIRY_RING_MUSHROOM.defaultBlockState().setValue(FairyRingMushroomBlock.MUSHROOMS, 2), 2).add(HabitatBlocks.FAIRY_RING_MUSHROOM.defaultBlockState().setValue(FairyRingMushroomBlock.MUSHROOMS, 3), 3).add(HabitatBlocks.FAIRY_RING_MUSHROOM.defaultBlockState().setValue(FairyRingMushroomBlock.MUSHROOMS, 4), 3));
+        WeightedBlockStateProvider mushroomProvider = new WeightedBlockStateProvider(DataPool.<BlockState>builder().add(HabitatBlocks.FAIRY_RING_MUSHROOM.getDefaultState(), 1).add(HabitatBlocks.FAIRY_RING_MUSHROOM.getDefaultState().setValue(FairyRingMushroomBlock.MUSHROOMS, 2), 2).add(HabitatBlocks.FAIRY_RING_MUSHROOM.getDefaultState().setValue(FairyRingMushroomBlock.MUSHROOMS, 3), 3).add(HabitatBlocks.FAIRY_RING_MUSHROOM.getDefaultState().setValue(FairyRingMushroomBlock.MUSHROOMS, 4), 3));
 
         BlockState stem = config.stemProvider.getBlockState(rand, pos);
         if (CompatHelper.checkMods("enhanced_mushrooms"))
-            stem = HabitatBlocks.ENHANCED_FAIRY_RING_MUSHROOM_STEM.defaultBlockState();
+            stem = HabitatBlocks.ENHANCED_FAIRY_RING_MUSHROOM_STEM.getDefaultState();
 
         for (int i = 0; i < i0; ++i) {
             blockpos$mutable.set(pos).move(Direction.UP, i);
@@ -73,7 +73,7 @@ public class HugeFairyRingMushroomFeature extends HugeMushroomFeature {
                         BlockPos.Mutable inPos = new BlockPos.Mutable().set(blockpos$mutable, x, 0, z);
                         if (!world.getBlockState(inPos).isOpaqueFullCube(world, inPos)) {
                             if (i > i0 - 6 && (x != 0 || z != 0) && rand.nextInt(12) == 0 && !world.getBlockState(inPos.down()).isOf(HabitatBlocks.FAIRYLIGHT)) {
-                                this.setBlockState(world, inPos, HabitatBlocks.FAIRYLIGHT.defaultBlockState());
+                                this.setBlockState(world, inPos, HabitatBlocks.FAIRYLIGHT.getDefaultState());
                                 breakFlag = true;
                                 break;
                             }

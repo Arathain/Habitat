@@ -1,30 +1,26 @@
 package mod.schnappdragon.habitat.common.block;
 
-import mod.schnappdragon.habitat.core.registry.HabitatBlocks;
 import mod.schnappdragon.habitat.common.registry.HabitatParticleTypes;
-import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.server.level.ServerLevel;
-import net.minecraft.util.MathHelper;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.ChunkPos;
-import net.minecraft.world.level.Level;
-import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.BonemealableBlock;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.levelgen.WorldgenRandom;
-import net.minecraft.world.level.material.PushReaction;
-import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.VoxelShape;
+import mod.schnappdragon.habitat.core.registry.HabitatBlocks;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockState;
+import net.minecraft.block.Fertilizable;
+import net.minecraft.block.ShapeContext;
+import net.minecraft.block.piston.PistonBehavior;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityType;
+import net.minecraft.server.world.ServerWorld;
+import net.minecraft.util.math.*;
+import net.minecraft.util.shape.VoxelShape;
+import net.minecraft.world.BlockView;
+import net.minecraft.world.StructureWorldAccess;
+import net.minecraft.world.World;
+import net.minecraft.world.gen.random.ChunkRandom;
 
 import java.util.Random;
 
-public abstract class AbstractSlimeFernBlock extends Block implements BonemealableBlock {
-    public AbstractSlimeFernBlock(Properties properties) {
+public abstract class AbstractSlimeFernBlock extends Block implements Fertilizable {
+    public AbstractSlimeFernBlock(Settings properties) {
         super(properties);
     }
 
@@ -32,28 +28,27 @@ public abstract class AbstractSlimeFernBlock extends Block implements Bonemealab
      * Particle Animation Method
      */
 
-    public void animateTick(BlockState state, Level worldIn, BlockPos pos, Random rand) {
-        if (rand.nextInt(10) == 0) {
-            VoxelShape voxelshape = this.getShape(state, worldIn, pos, CollisionContext.empty());
-            Vec3 vector3d = voxelshape.bounds().getCenter();
+    @Override
+    public void randomDisplayTick(BlockState state, World world, BlockPos pos, Random random) {
+        if (random.nextInt(10) == 0) {
+            VoxelShape voxelshape = this.getCollisionShape(state, world, pos, ShapeContext.absent());
+            Vec3d vector3d = voxelshape.getBoundingBox().getCenter();
             double X = (double) pos.getX() + vector3d.x;
             double Y = (double) pos.getY() + vector3d.y;
             double Z = (double) pos.getZ() + vector3d.z;
-            worldIn.addParticle(HabitatParticleTypes.FALLING_SLIME.get(), X + (2 * rand.nextDouble() - 1.0F) / 2.5D, Y - rand.nextDouble() / 5, Z + (2 * rand.nextDouble() - 1.0F) / 2.5D, 0.0D, 0.0D, 0.0D);
+            world.addParticle(HabitatParticleTypes.FALLING_SLIME, X + (2 * random.nextDouble() - 1.0F) / 2.5D, Y - random.nextDouble() / 5, Z + (2 * random.nextDouble() - 1.0F) / 2.5D, 0.0D, 0.0D, 0.0D);
         }
     }
-
     /*
      * Entity Walk Method
      */
 
-    @Override
-    public void entityInside(BlockState state, Level worldIn, BlockPos pos, Entity entityIn) {
+    public void onEntityCollision(BlockState state, World worldIn, BlockPos pos, Entity entityIn) {
         if (entityIn.getType() != EntityType.SLIME) {
-            double motionY = Math.abs(entityIn.getDeltaMovement().y);
-            if (motionY < 0.1D && !entityIn.isSteppingCarefully()) {
+            double motionY = Math.abs(entityIn.getVelocity().y);
+            if (motionY < 0.1D && !entityIn.bypassesSteppingEffects()) {
                 double slowedMotion = 0.4D + motionY * 0.2D;
-                entityIn.setDeltaMovement(entityIn.getDeltaMovement().multiply(slowedMotion, 1.0D, slowedMotion));
+                entityIn.setVelocity(entityIn.getVelocity().multiply(slowedMotion, 1.0D, slowedMotion));
             }
         }
     }
@@ -62,36 +57,37 @@ public abstract class AbstractSlimeFernBlock extends Block implements Bonemealab
      * IGrowable Methods
      */
 
-    public boolean isValidBonemealTarget(BlockGetter worldIn, BlockPos pos, BlockState state, boolean isClient) {
+
+    public boolean isFertilizable(BlockView world, BlockPos pos, BlockState state, boolean isClient) {
         if (!isClient) {
             ChunkPos chunkPos = new ChunkPos(pos);
-            return WorldgenRandom.seedSlimeChunk(chunkPos.x, chunkPos.z, ((WorldGenLevel) worldIn).getSeed(), 987234911L).nextInt(10) == 0;
+            return ChunkRandom.getSlimeRandom(chunkPos.x, chunkPos.z, ((StructureWorldAccess) world).getSeed(), 987234911L).nextInt(10) == 0;
         }
         return false;
     }
 
-    public boolean isBonemealSuccess(Level worldIn, Random rand, BlockPos pos, BlockState state) {
+    public boolean canGrow(World world, Random random, BlockPos pos, BlockState state) {
         return true;
     }
 
-    public void performBonemeal(ServerLevel worldIn, Random rand, BlockPos pos, BlockState state) {
-        BlockPos.MutableBlockPos blockpos$mutable = new BlockPos.MutableBlockPos();
+    public void grow(ServerWorld world, Random random, BlockPos pos, BlockState state) {
+        BlockPos.Mutable blockpos$mutable = new BlockPos.Mutable();
         Direction[] directions = new Direction[]{Direction.DOWN, Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST, Direction.UP};
 
         for (int j = 0; j < 3; ++j) {
-            blockpos$mutable.setWithOffset(pos, MathHelper.nextInt(rand, 1, 2) - MathHelper.nextInt(rand, 1, 2), MathHelper.nextInt(rand, 1, 2) - MathHelper.nextInt(rand, 1, 2), MathHelper.nextInt(rand, 1, 2) - MathHelper.nextInt(rand, 1, 2));
+            blockpos$mutable.set(pos, MathHelper.nextInt(random, 1, 2) - MathHelper.nextInt(random, 1, 2), MathHelper.nextInt(random, 1, 2) - MathHelper.nextInt(random, 1, 2), MathHelper.nextInt(random, 1, 2) - MathHelper.nextInt(random, 1, 2));
 
-            if (worldIn.isEmptyBlock(blockpos$mutable) || worldIn.getBlockState(blockpos$mutable).getMaterial().isReplaceable()) {
+            if (world.isAir(blockpos$mutable) || world.getBlockState(blockpos$mutable).getMaterial().isReplaceable()) {
                 for (Direction dir : directions) {
-                    if (worldIn.getBlockState(blockpos$mutable.relative(dir)).isFaceSturdy(worldIn, blockpos$mutable, dir.getOpposite())) {
-                        BlockState state1 = HabitatBlocks.SLIME_FERN.get().defaultBlockState();
+                    if (world.getBlockState(blockpos$mutable.offset(dir)).isSideSolidFullSquare(world, blockpos$mutable, dir.getOpposite())) {
+                        BlockState state1 = HabitatBlocks.SLIME_FERN.getDefaultState();
 
                         if (dir == Direction.UP)
-                            state1 = state1.setValue(SlimeFernBlock.ON_CEILING, true);
+                            state1 = state1.with(SlimeFernBlock.ON_CEILING, true);
                         else if (dir != Direction.DOWN)
-                            state1 = HabitatBlocks.WALL_SLIME_FERN.get().defaultBlockState().setValue(WallSlimeFernBlock.HORIZONTAL_FACING, dir.getOpposite());
+                            state1 = HabitatBlocks.WALL_SLIME_FERN.getDefaultState().setValue(WallSlimeFernBlock.HORIZONTAL_FACING, dir.getOpposite());
 
-                        worldIn.setBlock(blockpos$mutable, state1, 3);
+                        world.setBlockState(blockpos$mutable, state1, 3);
                         break;
                     }
                 }
@@ -103,7 +99,9 @@ public abstract class AbstractSlimeFernBlock extends Block implements Bonemealab
      * Piston Push Reaction Method
      */
 
-    public PushReaction getPistonPushReaction(BlockState state) {
-        return PushReaction.DESTROY;
+    @Override
+    public PistonBehavior getPistonBehavior(BlockState state) {
+        return PistonBehavior.DESTROY;
     }
+
 }

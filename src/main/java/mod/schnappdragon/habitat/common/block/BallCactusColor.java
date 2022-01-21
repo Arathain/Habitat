@@ -1,10 +1,10 @@
 package mod.schnappdragon.habitat.common.block;
 
 import mod.schnappdragon.habitat.Habitat;
-import net.minecraft.resources.Identifier;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.block.Block;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraft.block.Block;
+import net.minecraft.item.Item;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public enum BallCactusColor {
     PINK("pink"),
@@ -19,18 +19,18 @@ public enum BallCactusColor {
     }
 
     public Item getFlower() {
-        return ForgeRegistries.ITEMS.getValue(new Identifier(Habitat.MOD_ID, this.color + "_ball_cactus_flower"));
+        return Registry.ITEM.get(new Identifier(Habitat.MOD_ID, this.color + "_ball_cactus_flower"));
     }
 
     public Block getGrowingBallCactus() {
-        return ForgeRegistries.BLOCKS.getValue(new Identifier(Habitat.MOD_ID, "growing_" + this.color + "_ball_cactus"));
+        return Registry.BLOCK.get(new Identifier(Habitat.MOD_ID, "growing_" + this.color + "_ball_cactus"));
     }
 
     public Block getBallCactus() {
-        return ForgeRegistries.BLOCKS.getValue(new Identifier(Habitat.MOD_ID, this.color + "_ball_cactus"));
+        return Registry.BLOCK.get(new Identifier(Habitat.MOD_ID, this.color + "_ball_cactus"));
     }
 
     public Block getFloweringBallCactus() {
-        return ForgeRegistries.BLOCKS.getValue(new Identifier(Habitat.MOD_ID, "flowering_" + this.color + "_ball_cactus"));
+        return Registry.BLOCK.get(new Identifier(Habitat.MOD_ID, "flowering_" + this.color + "_ball_cactus"));
     }
 }

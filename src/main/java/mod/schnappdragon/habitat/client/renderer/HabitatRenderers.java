@@ -1,12 +1,10 @@
 package mod.schnappdragon.habitat.client.renderer;
 
 import mod.schnappdragon.habitat.client.renderer.block.HabitatChestRenderer;
-import mod.schnappdragon.habitat.client.renderer.entity.HabitatBoatRenderer;
 import mod.schnappdragon.habitat.client.renderer.entity.PasserineEntityRenderer;
 import mod.schnappdragon.habitat.client.renderer.entity.PookaRenderer;
 import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.core.registry.HabitatBlockEntityTypes;
-import mod.schnappdragon.habitat.core.registry.HabitatEntityTypes;
 import net.minecraft.client.renderer.blockentity.SignRenderer;
 import net.minecraft.client.renderer.entity.ThrownItemRenderer;
 import net.minecraftforge.api.distmarker.Dist;

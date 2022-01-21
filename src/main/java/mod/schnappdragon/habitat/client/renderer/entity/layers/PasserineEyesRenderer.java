@@ -1,24 +1,15 @@
 package mod.schnappdragon.habitat.client.renderer.entity.layers;
 
-import com.mojang.blaze3d.vertex.PoseStack;
-import com.mojang.blaze3d.vertex.VertexConsumer;
+import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.client.model.PasserineEntityModel;
 import mod.schnappdragon.habitat.common.entity.animal.PasserineEntity;
-import mod.schnappdragon.habitat.Habitat;
 import net.minecraft.client.render.RenderLayer;
 import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.VertexConsumerProvider;
 import net.minecraft.client.render.entity.LivingEntityRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRenderer;
 import net.minecraft.client.render.entity.feature.FeatureRendererContext;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.entity.LivingEntityRenderer;
-import net.minecraft.client.renderer.entity.RenderLayerParent;
-import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.resources.Identifier;
-import net.minecraft.scoreboard.ScoreboardCriterion;
 import net.minecraft.util.Identifier;
 
 public class PasserineEyesRenderer<T extends PasserineEntity, M extends PasserineEntityModel<T>> extends FeatureRenderer<T, M> {

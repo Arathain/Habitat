@@ -1,12 +1,8 @@
-package mod.schnappdragon.habitat.core.registry;
+package mod.schnappdragon.habitat.common.registry;
 
-import mod.schnappdragon.habitat.common.worldgen.placement.SlimeChunkFilter;
 import mod.schnappdragon.habitat.Habitat;
 import mod.schnappdragon.habitat.common.registry.HabitatConfiguredFeatures;
-import net.minecraft.core.Registry;
-import net.minecraft.data.BuiltinRegistries;
-import net.minecraft.data.worldgen.placement.PlacementUtils;
-import net.minecraft.resources.Identifier;
+import mod.schnappdragon.habitat.common.worldgen.placement.SlimeChunkFilter;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.registry.BuiltinRegistries;
 import net.minecraft.util.registry.Registry;
@@ -17,8 +13,6 @@ import net.minecraft.world.gen.decorator.RarityFilterPlacementModifier;
 import net.minecraft.world.gen.decorator.SquarePlacementModifier;
 import net.minecraft.world.gen.feature.PlacedFeature;
 import net.minecraft.world.gen.feature.PlacedFeatures;
-import net.minecraft.world.level.levelgen.VerticalAnchor;
-import net.minecraft.world.level.levelgen.placement.*;
 
 public class HabitatPlacedFeatures {
     public static final PlacedFeature PATCH_RAFFLESIA = HabitatConfiguredFeatures.PATCH_RAFFLESIA.withPlacement(RarityFilterPlacementModifier.of(4), SquarePlacementModifier.of(), PlacedFeatures.MOTION_BLOCKING_HEIGHTMAP, BiomePlacementModifier.of());

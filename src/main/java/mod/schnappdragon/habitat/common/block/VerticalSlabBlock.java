@@ -37,7 +37,7 @@ public class VerticalSlabBlock extends Block implements SimpleWaterloggedBlock {
 
     public VerticalSlabBlock(Properties properties) {
         super(properties);
-        this.registerDefaultState(defaultBlockState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
+        this.registerDefaultState(getDefaultState().setValue(FACING, Direction.NORTH).setValue(WATERLOGGED, false));
     }
 
     @Override
@@ -74,7 +74,7 @@ public class VerticalSlabBlock extends Block implements SimpleWaterloggedBlock {
         if (state.getBlock() == this)
             return state.setValue(TYPE, VerticalSlabType.DOUBLE).setValue(WATERLOGGED, false);
 
-        return defaultBlockState().setValue(WATERLOGGED, context.getLevel().getFluidState(pos).getType() == Fluids.WATER).setValue(FACING, getDirectionForPlacement(context));
+        return getDefaultState().setValue(WATERLOGGED, context.getLevel().getFluidState(pos).getType() == Fluids.WATER).setValue(FACING, getDirectionForPlacement(context));
     }
 
     private Direction getDirectionForPlacement(BlockPlaceContext context) {

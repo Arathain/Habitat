@@ -1,7 +1,7 @@
 package mod.schnappdragon.habitat.client.model;
 
 import com.google.common.collect.ImmutableList;
-import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.matrixStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import mod.schnappdragon.habitat.common.entity.monster.PookaEntity;
 import net.minecraft.client.model.EntityModel;
@@ -12,8 +12,11 @@ import net.minecraft.client.model.geom.builders.CubeListBuilder;
 import net.minecraft.client.model.geom.builders.LayerDefinition;
 import net.minecraft.client.model.geom.builders.MeshDefinition;
 import net.minecraft.client.model.geom.builders.PartDefinition;
+import net.minecraft.client.render.VertexConsumer;
 import net.minecraft.client.render.entity.model.EntityModel;
+import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 
 public class PookaModel<T extends PookaEntity> extends EntityModel<T> {
     private final ModelPart leftRearFoot;
@@ -67,51 +70,53 @@ public class PookaModel<T extends PookaEntity> extends EntityModel<T> {
         return LayerDefinition.create(meshdefinition, 64, 32);
     }
 
-    public void renderToBuffer(PoseStack poseStack, VertexConsumer consumer, int packedLightIn, int packedOverlayIn, float red, float green, float blue, float alpha) {
-        if (this.young) {
-            poseStack.pushPose();
-            poseStack.scale(0.56666666F, 0.56666666F, 0.56666666F);
-            poseStack.translate(0.0D, 1.375D, 0.125D);
+    @Override
+    public void render(MatrixStack matrixStack, VertexConsumer consumer, int light, int overlay, float red, float green, float blue, float alpha) {
+        if (this.child) {
+            matrixStack.push();
+            matrixStack.scale(0.56666666F, 0.56666666F, 0.56666666F);
+            matrixStack.translate(0.0D, 1.375D, 0.125D);
             ImmutableList.of(this.head, this.leftEar, this.rightEar).forEach((part) -> {
-                part.render(poseStack, consumer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+                part.render(matrixStack, consumer, light, overlay, red, green, blue, alpha);
             });
-            poseStack.popPose();
-            poseStack.pushPose();
-            poseStack.scale(0.4F, 0.4F, 0.4F);
-            poseStack.translate(0.0D, 2.25D, 0.0D);
+            matrixStack.pop();
+            matrixStack.push();
+            matrixStack.scale(0.4F, 0.4F, 0.4F);
+            matrixStack.translate(0.0D, 2.25D, 0.0D);
             ImmutableList.of(this.leftRearFoot, this.rightRearFoot, this.leftHaunch, this.rightHaunch, this.body, this.leftFrontLeg, this.rightFrontLeg, this.tail).forEach((part) -> {
-                part.render(poseStack, consumer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+                part.render(matrixStack, consumer, light, overlay, red, green, blue, alpha);
             });
-            poseStack.popPose();
+            matrixStack.pop();
         } else {
-            poseStack.pushPose();
-            poseStack.scale(0.6F, 0.6F, 0.6F);
-            poseStack.translate(0.0D, 1.0D, 0.0D);
+            matrixStack.push();
+            matrixStack.scale(0.6F, 0.6F, 0.6F);
+            matrixStack.translate(0.0D, 1.0D, 0.0D);
             ImmutableList.of(this.leftRearFoot, this.rightRearFoot, this.leftHaunch, this.rightHaunch, this.body, this.leftFrontLeg, this.rightFrontLeg, this.head, this.rightEar, this.leftEar, this.tail).forEach((part) -> {
-                part.render(poseStack, consumer, packedLightIn, packedOverlayIn, red, green, blue, alpha);
+                part.render(matrixStack, consumer, light, overlay, red, green, blue, alpha);
             });
-            poseStack.popPose();
+            matrixStack.pop();
         }
     }
 
-    public void setupAnim(PookaEntity pooka, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
-        float f = ageInTicks - (float) pooka.tickCount;
-        this.head.xRot = headPitch * ((float) Math.PI / 180F);
-        this.rightEar.xRot = this.head.xRot;
-        this.leftEar.xRot = this.head.xRot;
-        this.head.yRot = netHeadYaw * ((float) Math.PI / 180F);
-        this.rightEar.yRot = this.head.yRot - 0.2617994F;
-        this.leftEar.yRot = this.head.yRot + 0.2617994F;
-        this.jumpRotation = MathHelper.sin(pooka.getJumpCompletion(f) * (float) Math.PI);
-        this.leftHaunch.xRot = (this.jumpRotation * 50.0F - 21.0F) * ((float) Math.PI / 180F);
-        this.rightHaunch.xRot = this.leftHaunch.xRot;
-        this.leftRearFoot.xRot = this.jumpRotation * 50.0F * ((float) Math.PI / 180F);
-        this.rightRearFoot.xRot = this.leftRearFoot.xRot;
-        this.leftFrontLeg.xRot = (this.jumpRotation * -40.0F - 11.0F) * ((float) Math.PI / 180F);
-        this.rightFrontLeg.xRot = this.leftFrontLeg.xRot;
+
+    public void setAngles(PookaEntity pooka, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch) {
+        float f = ageInTicks - (float) pooka.age;
+        this.head.pitch = headPitch * ((float) Math.PI / 180F);
+        this.rightEar.pitch = this.head.pitch;
+        this.leftEar.pitch = this.head.pitch;
+        this.head.yaw = netHeadYaw * ((float) Math.PI / 180F);
+        this.rightEar.yaw = this.head.yaw - 0.2617994F;
+        this.leftEar.yaw = this.head.yaw + 0.2617994F;
+        this.jumpRotation = MathHelper.sin(pooka.getJumpProgress(f) * (float) Math.PI);
+        this.leftHaunch.pitch = (this.jumpRotation * 50.0F - 21.0F) * ((float) Math.PI / 180F);
+        this.rightHaunch.pitch = this.leftHaunch.pitch;
+        this.leftRearFoot.pitch = this.jumpRotation * 50.0F * ((float) Math.PI / 180F);
+        this.rightRearFoot.pitch = this.leftRearFoot.pitch;
+        this.leftFrontLeg.pitch = (this.jumpRotation * -40.0F - 11.0F) * ((float) Math.PI / 180F);
+        this.rightFrontLeg.pitch = this.leftFrontLeg.pitch;
     }
 
     public void prepareMobModel(PookaEntity pooka, float limbSwing, float limbSwingAmount, float partialTick) {
-        this.jumpRotation = MathHelper.sin(pooka.getJumpCompletion(partialTick) * (float) Math.PI);
+        this.jumpRotation = MathHelper.sin(pooka.getJumpProgress(partialTick) * (float) Math.PI);
     }
 }
